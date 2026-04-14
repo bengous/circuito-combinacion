@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Circuit Va-et-Vient — Simulateur Interactif</title>
+<title>Circuito Combinación — Simulador Interactivo</title>
 <style>
 /* ─── Reset & Base ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -234,10 +234,8 @@ h1 {
 .wire.active {
   opacity: 1;
   stroke-width: 5;
-  /* CSS drop-shadow instead of SVG filter — avoids 0-height bounding box bug */
   filter: drop-shadow(0 0 4px currentColor) drop-shadow(0 0 1px currentColor);
 }
-/* Brighter colors for active wires — high contrast on dark bg */
 .wire-phase.active   { stroke: #ff6666; }
 .wire-neutral.active { stroke: #66bbff; }
 .wire-retour.active  { stroke: #ffcc55; }
@@ -404,16 +402,20 @@ h1 {
 
 <div id="app">
   <header>
-    <h1>Circuit d'éclairage</h1>
-    <p class="subtitle">Commande depuis plusieurs endroits — sans électronique</p>
+    <h1>Circuito de iluminación</h1>
+    <p class="subtitle">Control desde varios puntos — sin electrónica</p>
     <nav class="tabs">
       <button class="tab-btn active" data-tab="2pt" onclick="switchTab('2pt')">
-        Va-et-vient simple
-        <small>2 points de commande</small>
+        Combinación simple
+        <small>2 puntos de control</small>
       </button>
       <button class="tab-btn" data-tab="3pt" onclick="switchTab('3pt')">
-        Va-et-vient + permutateur
-        <small>3 points de commande</small>
+        Combinación + conmutador
+        <small>3 puntos de control</small>
+      </button>
+      <button class="tab-btn" data-tab="4pt" onclick="switchTab('4pt')">
+        Doble conmutador
+        <small>4 puntos de control</small>
       </button>
     </nav>
   </header>
@@ -463,104 +465,87 @@ h1 {
         <rect width="960" height="540" fill="url(#grid-pat)" opacity="0.6"/>
 
         <!-- ════════════════════════════════════════════════════ -->
-        <!-- TAB 1: Va-et-vient simple — 2 points de commande   -->
+        <!-- TAB 1: Combinación simple — 2 puntos de control    -->
         <!-- ════════════════════════════════════════════════════ -->
         <g id="tab-2pt">
 
-          <!-- ── Wires ── -->
-          <!-- Phase: source to SW1 common -->
+          <!-- ── Cables ── -->
           <path id="t1-phase" class="wire wire-phase" d="M 80,170 L 158,170"/>
-          <!-- Shuttle A: SW1 trav-A to SW2 trav-A -->
           <path id="t1-shuttle-a" class="wire wire-shuttle" d="M 262,145 L 668,145"/>
-          <!-- Shuttle B: SW1 trav-B to SW2 trav-B -->
           <path id="t1-shuttle-b" class="wire wire-shuttle" d="M 262,195 L 668,195"/>
-          <!-- Return: SW2 common to lamp -->
           <path id="t1-return" class="wire wire-retour" d="M 772,170 L 850,170 L 850,365 L 512,365"/>
-          <!-- Neutral: lamp to neutral source -->
           <path id="t1-neutral" class="wire wire-neutral" d="M 490,387 L 490,455 L 80,455"/>
 
-          <!-- ── Phase source dot ── -->
+          <!-- ── Fuente fase ── -->
           <circle cx="80" cy="170" r="7" fill="var(--phase)" opacity="0.8"/>
-          <text class="svg-label-color" x="80" y="152" fill="var(--phase)">Phase (L)</text>
+          <text class="svg-label-color" x="80" y="152" fill="var(--phase)">Fase (L)</text>
 
-          <!-- ── Neutral source dot ── -->
+          <!-- ── Fuente neutro ── -->
           <circle cx="80" cy="455" r="7" fill="var(--neutral)" opacity="0.8"/>
-          <text class="svg-label-color" x="80" y="475" fill="var(--neutral)">Neutre (N)</text>
+          <text class="svg-label-color" x="80" y="475" fill="var(--neutral)">Neutro (N)</text>
 
-          <!-- ── SW1: va-et-vient 1 ── -->
+          <!-- ── SW1: interruptor combinado 1 ── -->
           <g id="t1-sw1" transform="translate(210,170)"
-             data-tooltip="Interrupteur va-et-vient n°1&#10;Commute le commun (phase) entre deux navettes.&#10;Cliquez pour basculer.">
+             data-tooltip="Interruptor combinado n°1&#10;Conmuta el común (fase) entre los dos puentes.&#10;Hacé clic para cambiar.">
             <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
-            <!-- Common terminal (left) -->
             <circle id="t1-sw1-tc" class="terminal" cx="-52" cy="0" r="6"/>
-            <!-- Traveler A terminal (right-top) -->
             <circle id="t1-sw1-ta" class="terminal" cx="52" cy="-25" r="6"/>
-            <!-- Traveler B terminal (right-bottom) -->
             <circle id="t1-sw1-tb" class="terminal" cx="52" cy="25" r="6"/>
-            <!-- Contact arm -->
             <line id="t1-sw1-arm" class="arm" x1="-44" y1="0" x2="44" y2="-25"/>
-            <!-- Labels inside -->
             <text class="svg-label-sm" x="-38" y="-32">C</text>
             <text class="svg-label-sm" x="38" y="-36">A</text>
             <text class="svg-label-sm" x="38" y="40">B</text>
-            <!-- Click zone -->
             <rect class="click-zone" x="-56" y="-52" width="112" height="104"
                   onclick="toggleSwitch('2pt','sw1')"/>
           </g>
-          <text class="svg-label-bold" x="210" y="240">Interrupteur 1</text>
-          <text id="t1-sw1-lbl" class="svg-label-sm" x="210" y="254">Position A ↑</text>
+          <text class="svg-label-bold" x="210" y="240">Interruptor 1</text>
+          <text id="t1-sw1-lbl" class="svg-label-sm" x="210" y="254">Posición A ↑</text>
 
-          <!-- ── SW2: va-et-vient 2 ── -->
+          <!-- ── SW2: interruptor combinado 2 ── -->
           <g id="t1-sw2" transform="translate(720,170)"
-             data-tooltip="Interrupteur va-et-vient n°2&#10;Commute le retour lampe entre deux navettes.&#10;Cliquez pour basculer.">
+             data-tooltip="Interruptor combinado n°2&#10;Conmuta el retorno de la lámpara entre los dos puentes.&#10;Hacé clic para cambiar.">
             <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
-            <!-- Traveler A (left-top) -->
             <circle id="t1-sw2-ta" class="terminal" cx="-52" cy="-25" r="6"/>
-            <!-- Traveler B (left-bottom) -->
             <circle id="t1-sw2-tb" class="terminal" cx="-52" cy="25" r="6"/>
-            <!-- Common (right) -->
             <circle id="t1-sw2-tc" class="terminal" cx="52" cy="0" r="6"/>
-            <!-- Contact arm -->
             <line id="t1-sw2-arm" class="arm" x1="44" y1="0" x2="-44" y2="-25"/>
-            <!-- Labels inside -->
             <text class="svg-label-sm" x="-38" y="-36">A</text>
             <text class="svg-label-sm" x="-38" y="40">B</text>
             <text class="svg-label-sm" x="38" y="-32">C</text>
-            <!-- Click zone -->
             <rect class="click-zone" x="-56" y="-52" width="112" height="104"
                   onclick="toggleSwitch('2pt','sw2')"/>
           </g>
-          <text class="svg-label-bold" x="720" y="240">Interrupteur 2</text>
-          <text id="t1-sw2-lbl" class="svg-label-sm" x="720" y="254">Position A ↑</text>
+          <text class="svg-label-bold" x="720" y="240">Interruptor 2</text>
+          <text id="t1-sw2-lbl" class="svg-label-sm" x="720" y="254">Posición A ↑</text>
 
-          <!-- ── Shuttle labels ── -->
+          <!-- ── Etiquetas puentes ── -->
           <text class="svg-label" x="465" y="138"
-                data-tooltip="Navette A&#10;L'un des deux fils reliant les interrupteurs.&#10;Le courant y passe quand les deux interrupteurs sont en position A.">Navette A</text>
+                data-tooltip="Puente A&#10;Uno de los dos cables que conectan los interruptores.&#10;La corriente pasa cuando ambos interruptores están en posición A.">Puente A</text>
           <text class="svg-label" x="465" y="212"
-                data-tooltip="Navette B&#10;L'un des deux fils reliant les interrupteurs.&#10;Le courant y passe quand les deux interrupteurs sont en position B.">Navette B</text>
+                data-tooltip="Puente B&#10;Uno de los dos cables que conectan los interruptores.&#10;La corriente pasa cuando ambos interruptores están en posición B.">Puente B</text>
 
-          <!-- ── Return label ── -->
+          <!-- ── Etiqueta retorno ── -->
           <text class="svg-label-color" x="870" y="272" fill="var(--retour)" transform="rotate(90,870,272)"
-                data-tooltip="Retour lampe&#10;Ce fil transporte le courant depuis l'interrupteur 2 vers la lampe.">Retour</text>
+                data-tooltip="Retorno lámpara&#10;Este cable lleva la corriente desde el interruptor 2 hasta la lámpara.">Retorno</text>
 
-          <!-- ── Lamp ── -->
+          <!-- ── Lámpara ── -->
           <g id="t1-lamp" class="lamp-group on" transform="translate(490,365)"
-             data-tooltip="Lampe&#10;S'allume quand le circuit est fermé :&#10;un chemin continu relie la phase au neutre.">
+             data-tooltip="Lámpara&#10;Se enciende cuando el circuito está cerrado:&#10;un camino continuo conecta la fase con el neutro.">
             <circle class="lamp-glow" r="45" filter="url(#glow-lamp)"/>
             <circle class="lamp-glass" r="22"/>
             <path class="lamp-filament" d="M -8,-4 Q -4,-14 0,-2 Q 4,-14 8,-4"/>
             <rect class="lamp-base-r" x="-10" y="17" width="20" height="6" rx="2"/>
           </g>
-          <text class="svg-label-bold" x="490" y="410">Lampe</text>
+          <text class="svg-label-bold" x="490" y="410">Lámpara</text>
 
         </g><!-- /tab-2pt -->
 
         <!-- ════════════════════════════════════════════════════ -->
-        <!-- TAB 2: Va-et-vient + permutateur — 3 points        -->
+        <!-- TAB 2: Combinación + conmutador — 3 puntos         -->
         <!-- ════════════════════════════════════════════════════ -->
         <g id="tab-3pt" display="none">
 
-          <!-- ── Wires ── -->
+          <!-- ── Cables ── -->
           <path id="t2-phase" class="wire wire-phase" d="M 50,170 L 98,170"/>
           <path id="t2-shuttle-al" class="wire wire-shuttle" d="M 202,145 L 363,145"/>
           <path id="t2-shuttle-bl" class="wire wire-shuttle" d="M 202,195 L 363,195"/>
@@ -569,17 +554,17 @@ h1 {
           <path id="t2-return" class="wire wire-retour" d="M 772,170 L 850,170 L 850,365 L 512,365"/>
           <path id="t2-neutral" class="wire wire-neutral" d="M 490,387 L 490,455 L 50,455"/>
 
-          <!-- ── Phase source ── -->
+          <!-- ── Fuente fase ── -->
           <circle cx="50" cy="170" r="7" fill="var(--phase)" opacity="0.8"/>
-          <text class="svg-label-color" x="50" y="152" fill="var(--phase)">Phase (L)</text>
+          <text class="svg-label-color" x="50" y="152" fill="var(--phase)">Fase (L)</text>
 
-          <!-- ── Neutral source ── -->
+          <!-- ── Fuente neutro ── -->
           <circle cx="50" cy="455" r="7" fill="var(--neutral)" opacity="0.8"/>
-          <text class="svg-label-color" x="50" y="475" fill="var(--neutral)">Neutre (N)</text>
+          <text class="svg-label-color" x="50" y="475" fill="var(--neutral)">Neutro (N)</text>
 
           <!-- ── SW1 ── -->
           <g id="t2-sw1" transform="translate(150,170)"
-             data-tooltip="Interrupteur va-et-vient n°1&#10;Premier point de commande.&#10;Commute la phase entre les deux navettes.&#10;Cliquez pour basculer.">
+             data-tooltip="Interruptor combinado n°1&#10;Primer punto de control.&#10;Conmuta la fase entre los dos puentes.&#10;Hacé clic para cambiar.">
             <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
             <circle id="t2-sw1-tc" class="terminal" cx="-52" cy="0" r="6"/>
             <circle id="t2-sw1-ta" class="terminal" cx="52" cy="-25" r="6"/>
@@ -591,38 +576,34 @@ h1 {
             <rect class="click-zone" x="-56" y="-52" width="112" height="104"
                   onclick="toggleSwitch('3pt','sw1')"/>
           </g>
-          <text class="svg-label-bold" x="150" y="240">Interrupteur 1</text>
-          <text id="t2-sw1-lbl" class="svg-label-sm" x="150" y="254">Position A ↑</text>
+          <text class="svg-label-bold" x="150" y="240">Interruptor 1</text>
+          <text id="t2-sw1-lbl" class="svg-label-sm" x="150" y="254">Posición A ↑</text>
 
-          <!-- ── Crossover (Permutateur) ── -->
+          <!-- ── Conmutador de cruce ── -->
           <g id="t2-crossover" transform="translate(430,170)"
-             data-tooltip="Permutateur (interrupteur de croisement)&#10;4 bornes : croise ou laisse passer droit les navettes.&#10;En liaison droite : A→A et B→B&#10;En liaison croisée : A→B et B→A&#10;Cliquez pour basculer.">
+             data-tooltip="Conmutador de cruce&#10;4 bornes: cruza o deja pasar directo los puentes.&#10;En conexión directa: A→A y B→B&#10;En conexión cruzada: A→B y B→A&#10;Hacé clic para cambiar.">
             <rect class="cross-body" x="-67" y="-52" width="134" height="104"/>
-            <!-- 4 terminals -->
             <circle id="t2-cr-it" class="terminal" cx="-67" cy="-25" r="6"/>
             <circle id="t2-cr-ib" class="terminal" cx="-67" cy="25" r="6"/>
             <circle id="t2-cr-ot" class="terminal" cx="67" cy="-25" r="6"/>
             <circle id="t2-cr-ob" class="terminal" cx="67" cy="25" r="6"/>
-            <!-- Internal connections -->
             <path id="t2-cross-1" class="wire wire-cross"
                   d="M -67,-25 C -20,-14 20,-14 67,-25"/>
             <path id="t2-cross-2" class="wire wire-cross"
                   d="M -67,25 C -20,14 20,14 67,25"/>
-            <!-- Terminal labels -->
             <text class="svg-label-sm" x="-55" y="-34">1</text>
             <text class="svg-label-sm" x="-55" y="38">2</text>
             <text class="svg-label-sm" x="55" y="-34">3</text>
             <text class="svg-label-sm" x="55" y="38">4</text>
-            <!-- Click zone -->
             <rect class="click-zone" x="-70" y="-55" width="140" height="110"
                   onclick="toggleSwitch('3pt','cross')"/>
           </g>
-          <text class="svg-label-bold" x="430" y="245">Permutateur</text>
-          <text id="t2-cross-lbl" class="svg-label-sm" x="430" y="259">Liaison droite ═══</text>
+          <text class="svg-label-bold" x="430" y="245">Conmutador</text>
+          <text id="t2-cross-lbl" class="svg-label-sm" x="430" y="259">Conexión directa ═══</text>
 
           <!-- ── SW2 ── -->
           <g id="t2-sw2" transform="translate(720,170)"
-             data-tooltip="Interrupteur va-et-vient n°2&#10;Dernier point de commande.&#10;Commute le retour lampe entre les deux navettes.&#10;Cliquez pour basculer.">
+             data-tooltip="Interruptor combinado n°2&#10;Último punto de control.&#10;Conmuta el retorno de la lámpara entre los dos puentes.&#10;Hacé clic para cambiar.">
             <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
             <circle id="t2-sw2-ta" class="terminal" cx="-52" cy="-25" r="6"/>
             <circle id="t2-sw2-tb" class="terminal" cx="-52" cy="25" r="6"/>
@@ -634,29 +615,154 @@ h1 {
             <rect class="click-zone" x="-56" y="-52" width="112" height="104"
                   onclick="toggleSwitch('3pt','sw2')"/>
           </g>
-          <text class="svg-label-bold" x="720" y="240">Interrupteur 2</text>
-          <text id="t2-sw2-lbl" class="svg-label-sm" x="720" y="254">Position A ↑</text>
+          <text class="svg-label-bold" x="720" y="240">Interruptor 2</text>
+          <text id="t2-sw2-lbl" class="svg-label-sm" x="720" y="254">Posición A ↑</text>
 
-          <!-- ── Shuttle labels ── -->
-          <text class="svg-label" x="282" y="138">Nav. A</text>
-          <text class="svg-label" x="282" y="212">Nav. B</text>
-          <text class="svg-label" x="583" y="138">Nav. A</text>
-          <text class="svg-label" x="583" y="212">Nav. B</text>
+          <!-- ── Etiquetas puentes ── -->
+          <text class="svg-label" x="282" y="138">Pte. A</text>
+          <text class="svg-label" x="282" y="212">Pte. B</text>
+          <text class="svg-label" x="583" y="138">Pte. A</text>
+          <text class="svg-label" x="583" y="212">Pte. B</text>
 
-          <!-- ── Return label ── -->
-          <text class="svg-label-color" x="870" y="272" fill="var(--retour)" transform="rotate(90,870,272)">Retour</text>
+          <!-- ── Etiqueta retorno ── -->
+          <text class="svg-label-color" x="870" y="272" fill="var(--retour)" transform="rotate(90,870,272)">Retorno</text>
 
-          <!-- ── Lamp ── -->
+          <!-- ── Lámpara ── -->
           <g id="t2-lamp" class="lamp-group on" transform="translate(490,365)"
-             data-tooltip="Lampe&#10;S'allume quand un chemin continu relie&#10;la phase au neutre à travers les interrupteurs.">
+             data-tooltip="Lámpara&#10;Se enciende cuando un camino continuo conecta&#10;la fase con el neutro a través de los interruptores.">
             <circle class="lamp-glow" r="45" filter="url(#glow-lamp)"/>
             <circle class="lamp-glass" r="22"/>
             <path class="lamp-filament" d="M -8,-4 Q -4,-14 0,-2 Q 4,-14 8,-4"/>
             <rect class="lamp-base-r" x="-10" y="17" width="20" height="6" rx="2"/>
           </g>
-          <text class="svg-label-bold" x="490" y="410">Lampe</text>
+          <text class="svg-label-bold" x="490" y="410">Lámpara</text>
 
         </g><!-- /tab-3pt -->
+
+        <!-- ════════════════════════════════════════════════════ -->
+        <!-- TAB 3: Doble conmutador — 4 puntos de control      -->
+        <!-- ════════════════════════════════════════════════════ -->
+        <g id="tab-4pt" display="none">
+
+          <!-- ── Cables ── -->
+          <path id="t3-phase" class="wire wire-phase" d="M 40,170 L 78,170"/>
+          <path id="t3-shuttle-al" class="wire wire-shuttle" d="M 182,145 L 263,145"/>
+          <path id="t3-shuttle-bl" class="wire wire-shuttle" d="M 182,195 L 263,195"/>
+          <path id="t3-shuttle-am" class="wire wire-shuttle" d="M 397,145 L 513,145"/>
+          <path id="t3-shuttle-bm" class="wire wire-shuttle" d="M 397,195 L 513,195"/>
+          <path id="t3-shuttle-ar" class="wire wire-shuttle" d="M 647,145 L 728,145"/>
+          <path id="t3-shuttle-br" class="wire wire-shuttle" d="M 647,195 L 728,195"/>
+          <path id="t3-return" class="wire wire-retour" d="M 832,170 L 900,170 L 900,365 L 472,365"/>
+          <path id="t3-neutral" class="wire wire-neutral" d="M 450,387 L 450,455 L 40,455"/>
+
+          <!-- ── Fuente fase ── -->
+          <circle cx="40" cy="170" r="7" fill="var(--phase)" opacity="0.8"/>
+          <text class="svg-label-color" x="40" y="152" fill="var(--phase)">Fase (L)</text>
+
+          <!-- ── Fuente neutro ── -->
+          <circle cx="40" cy="455" r="7" fill="var(--neutral)" opacity="0.8"/>
+          <text class="svg-label-color" x="40" y="475" fill="var(--neutral)">Neutro (N)</text>
+
+          <!-- ── SW1 ── -->
+          <g id="t3-sw1" transform="translate(130,170)"
+             data-tooltip="Interruptor combinado n°1&#10;Primer punto de control.&#10;Conmuta la fase entre los dos puentes.&#10;Hacé clic para cambiar.">
+            <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
+            <circle id="t3-sw1-tc" class="terminal" cx="-52" cy="0" r="6"/>
+            <circle id="t3-sw1-ta" class="terminal" cx="52" cy="-25" r="6"/>
+            <circle id="t3-sw1-tb" class="terminal" cx="52" cy="25" r="6"/>
+            <line id="t3-sw1-arm" class="arm" x1="-44" y1="0" x2="44" y2="-25"/>
+            <text class="svg-label-sm" x="-38" y="-32">C</text>
+            <text class="svg-label-sm" x="38" y="-36">A</text>
+            <text class="svg-label-sm" x="38" y="40">B</text>
+            <rect class="click-zone" x="-56" y="-52" width="112" height="104"
+                  onclick="toggleSwitch('4pt','sw1')"/>
+          </g>
+          <text class="svg-label-bold" x="130" y="240">Interruptor 1</text>
+          <text id="t3-sw1-lbl" class="svg-label-sm" x="130" y="254">Posición A ↑</text>
+
+          <!-- ── Conmutador 1 ── -->
+          <g id="t3-crossover1" transform="translate(330,170)"
+             data-tooltip="Conmutador de cruce n°1&#10;4 bornes: cruza o deja pasar directo los puentes.&#10;En conexión directa: A→A y B→B&#10;En conexión cruzada: A→B y B→A&#10;Hacé clic para cambiar.">
+            <rect class="cross-body" x="-67" y="-52" width="134" height="104"/>
+            <circle id="t3-cr1-it" class="terminal" cx="-67" cy="-25" r="6"/>
+            <circle id="t3-cr1-ib" class="terminal" cx="-67" cy="25" r="6"/>
+            <circle id="t3-cr1-ot" class="terminal" cx="67" cy="-25" r="6"/>
+            <circle id="t3-cr1-ob" class="terminal" cx="67" cy="25" r="6"/>
+            <path id="t3-cross1-1" class="wire wire-cross"
+                  d="M -67,-25 C -20,-14 20,-14 67,-25"/>
+            <path id="t3-cross1-2" class="wire wire-cross"
+                  d="M -67,25 C -20,14 20,14 67,25"/>
+            <text class="svg-label-sm" x="-55" y="-34">1</text>
+            <text class="svg-label-sm" x="-55" y="38">2</text>
+            <text class="svg-label-sm" x="55" y="-34">3</text>
+            <text class="svg-label-sm" x="55" y="38">4</text>
+            <rect class="click-zone" x="-70" y="-55" width="140" height="110"
+                  onclick="toggleSwitch('4pt','cross1')"/>
+          </g>
+          <text class="svg-label-bold" x="330" y="245">Conmutador 1</text>
+          <text id="t3-cross1-lbl" class="svg-label-sm" x="330" y="259">Conexión directa ═══</text>
+
+          <!-- ── Conmutador 2 ── -->
+          <g id="t3-crossover2" transform="translate(580,170)"
+             data-tooltip="Conmutador de cruce n°2&#10;4 bornes: cruza o deja pasar directo los puentes.&#10;En conexión directa: A→A y B→B&#10;En conexión cruzada: A→B y B→A&#10;Hacé clic para cambiar.">
+            <rect class="cross-body" x="-67" y="-52" width="134" height="104"/>
+            <circle id="t3-cr2-it" class="terminal" cx="-67" cy="-25" r="6"/>
+            <circle id="t3-cr2-ib" class="terminal" cx="-67" cy="25" r="6"/>
+            <circle id="t3-cr2-ot" class="terminal" cx="67" cy="-25" r="6"/>
+            <circle id="t3-cr2-ob" class="terminal" cx="67" cy="25" r="6"/>
+            <path id="t3-cross2-1" class="wire wire-cross"
+                  d="M -67,-25 C -20,-14 20,-14 67,-25"/>
+            <path id="t3-cross2-2" class="wire wire-cross"
+                  d="M -67,25 C -20,14 20,14 67,25"/>
+            <text class="svg-label-sm" x="-55" y="-34">1</text>
+            <text class="svg-label-sm" x="-55" y="38">2</text>
+            <text class="svg-label-sm" x="55" y="-34">3</text>
+            <text class="svg-label-sm" x="55" y="38">4</text>
+            <rect class="click-zone" x="-70" y="-55" width="140" height="110"
+                  onclick="toggleSwitch('4pt','cross2')"/>
+          </g>
+          <text class="svg-label-bold" x="580" y="245">Conmutador 2</text>
+          <text id="t3-cross2-lbl" class="svg-label-sm" x="580" y="259">Conexión directa ═══</text>
+
+          <!-- ── SW2 ── -->
+          <g id="t3-sw2" transform="translate(780,170)"
+             data-tooltip="Interruptor combinado n°2&#10;Último punto de control.&#10;Conmuta el retorno de la lámpara entre los dos puentes.&#10;Hacé clic para cambiar.">
+            <rect class="switch-body" x="-52" y="-48" width="104" height="96"/>
+            <circle id="t3-sw2-ta" class="terminal" cx="-52" cy="-25" r="6"/>
+            <circle id="t3-sw2-tb" class="terminal" cx="-52" cy="25" r="6"/>
+            <circle id="t3-sw2-tc" class="terminal" cx="52" cy="0" r="6"/>
+            <line id="t3-sw2-arm" class="arm" x1="44" y1="0" x2="-44" y2="-25"/>
+            <text class="svg-label-sm" x="-38" y="-36">A</text>
+            <text class="svg-label-sm" x="-38" y="40">B</text>
+            <text class="svg-label-sm" x="38" y="-32">C</text>
+            <rect class="click-zone" x="-56" y="-52" width="112" height="104"
+                  onclick="toggleSwitch('4pt','sw2')"/>
+          </g>
+          <text class="svg-label-bold" x="780" y="240">Interruptor 2</text>
+          <text id="t3-sw2-lbl" class="svg-label-sm" x="780" y="254">Posición A ↑</text>
+
+          <!-- ── Etiquetas puentes ── -->
+          <text class="svg-label" x="223" y="138">Pte. A</text>
+          <text class="svg-label" x="223" y="212">Pte. B</text>
+          <text class="svg-label" x="455" y="138">Pte. A</text>
+          <text class="svg-label" x="455" y="212">Pte. B</text>
+          <text class="svg-label" x="688" y="138">Pte. A</text>
+          <text class="svg-label" x="688" y="212">Pte. B</text>
+
+          <!-- ── Etiqueta retorno ── -->
+          <text class="svg-label-color" x="918" y="272" fill="var(--retour)" transform="rotate(90,918,272)">Retorno</text>
+
+          <!-- ── Lámpara ── -->
+          <g id="t3-lamp" class="lamp-group on" transform="translate(450,365)"
+             data-tooltip="Lámpara&#10;Se enciende cuando un camino continuo conecta&#10;la fase con el neutro a través de los 4 interruptores.">
+            <circle class="lamp-glow" r="45" filter="url(#glow-lamp)"/>
+            <circle class="lamp-glass" r="22"/>
+            <path class="lamp-filament" d="M -8,-4 Q -4,-14 0,-2 Q 4,-14 8,-4"/>
+            <rect class="lamp-base-r" x="-10" y="17" width="20" height="6" rx="2"/>
+          </g>
+          <text class="svg-label-bold" x="450" y="410">Lámpara</text>
+
+        </g><!-- /tab-4pt -->
 
       </svg>
     </div>
@@ -664,40 +770,44 @@ h1 {
     <div class="info-bar">
       <div id="status-panel">
         <div class="st-row">
-          <span class="st-label">Interrupteur 1 :</span>
-          <span id="st-sw1" class="st-val">Position A ↑</span>
+          <span class="st-label">Interruptor 1:</span>
+          <span id="st-sw1" class="st-val">Posición A ↑</span>
         </div>
-        <div id="st-cross-row" class="st-row" style="display:none">
-          <span class="st-label">Permutateur :</span>
-          <span id="st-cross" class="st-val">Liaison droite</span>
+        <div id="st-cross1-row" class="st-row" style="display:none">
+          <span id="st-cross1-label" class="st-label">Conmutador:</span>
+          <span id="st-cross1" class="st-val">Conexión directa</span>
+        </div>
+        <div id="st-cross2-row" class="st-row" style="display:none">
+          <span class="st-label">Conmutador 2:</span>
+          <span id="st-cross2" class="st-val">Conexión directa</span>
         </div>
         <div class="st-row">
-          <span class="st-label">Interrupteur 2 :</span>
-          <span id="st-sw2" class="st-val">Position A ↑</span>
+          <span class="st-label">Interruptor 2:</span>
+          <span id="st-sw2" class="st-val">Posición A ↑</span>
         </div>
         <div class="st-divider"></div>
         <div class="st-row">
-          <span class="st-label">Circuit :</span>
-          <span id="st-circuit" class="st-val on">Fermé</span>
+          <span class="st-label">Circuito:</span>
+          <span id="st-circuit" class="st-val on">Cerrado</span>
         </div>
         <div class="st-row">
-          <span class="st-label">Lampe :</span>
-          <span id="st-lamp" class="st-val on">Allumée</span>
+          <span class="st-label">Lámpara:</span>
+          <span id="st-lamp" class="st-val on">Encendida</span>
         </div>
       </div>
 
       <div id="controls">
-        <button class="ctrl-btn" onclick="resetCircuit()">Réinitialiser</button>
-        <button id="btn-auto" class="ctrl-btn" onclick="toggleAutoplay()">Lecture automatique</button>
+        <button class="ctrl-btn" onclick="resetCircuit()">Reiniciar</button>
+        <button id="btn-auto" class="ctrl-btn" onclick="toggleAutoplay()">Reproducción automática</button>
       </div>
     </div>
 
     <div class="legend">
-      <span class="legend-item"><span class="swatch phase"></span> Phase</span>
-      <span class="legend-item"><span class="swatch neutral"></span> Neutre</span>
-      <span class="legend-item"><span class="swatch retour"></span> Retour lampe</span>
-      <span class="legend-item"><span class="swatch shuttle"></span> Navettes</span>
-      <span class="legend-item"><span class="swatch active"></span> Chemin actif</span>
+      <span class="legend-item"><span class="swatch phase"></span> Fase</span>
+      <span class="legend-item"><span class="swatch neutral"></span> Neutro</span>
+      <span class="legend-item"><span class="swatch retour"></span> Retorno</span>
+      <span class="legend-item"><span class="swatch shuttle"></span> Puentes</span>
+      <span class="legend-item"><span class="swatch active"></span> Camino activo</span>
     </div>
   </main>
 </div>
@@ -706,83 +816,100 @@ h1 {
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   Circuit Va-et-Vient — Interactive Simulator
-   Pure vanilla JS, no dependencies
+   Circuito Combinación — Simulador Interactivo
+   JS puro, sin dependencias
    ═══════════════════════════════════════════════════════════ */
 
-// ─── State ───
+// ─── Estado ───
 const state = {
   tab: '2pt',
   autoplay: false,
   autoTimer: null,
   autoIndex: 0,
   switches: {
-    '2pt': { sw1: 0, sw2: 0 },       // 0 = position A (top), 1 = position B (bottom)
-    '3pt': { sw1: 0, cross: 0, sw2: 0 } // cross: 0 = straight, 1 = crossed
+    '2pt': { sw1: 0, sw2: 0 },
+    '3pt': { sw1: 0, cross: 0, sw2: 0 },
+    '4pt': { sw1: 0, cross1: 0, cross2: 0, sw2: 0 }
   }
 };
 
-// ─── Circuit Logic ───
-// Returns { closed: bool, segments: string[] } for the active tab
+// ─── Prefijo por pestaña ───
+function tabPrefix(tabId) {
+  return tabId === '2pt' ? 't1' : tabId === '3pt' ? 't2' : 't3';
+}
+
+// ─── Lógica del circuito ───
 function getActivePath(tabId) {
   const s = state.switches[tabId];
+
   if (tabId === '2pt') {
-    // closed when both switches select the same shuttle
     const closed = s.sw1 === s.sw2;
     if (!closed) return { closed: false, segments: [] };
     const shuttle = s.sw1 === 0 ? 't1-shuttle-a' : 't1-shuttle-b';
     return { closed: true, segments: ['t1-phase', shuttle, 't1-return', 't1-neutral'] };
   }
-  // 3-point: phase → SW1 → left shuttle → crossover → right shuttle → SW2 → lamp
-  const enterTop = s.sw1 === 0;
-  const exitTop = s.cross === 0 ? enterTop : !enterTop;
-  const sw2Top = s.sw2 === 0;
-  const closed = exitTop === sw2Top;
+
+  if (tabId === '3pt') {
+    const enterTop = s.sw1 === 0;
+    const exitTop = s.cross === 0 ? enterTop : !enterTop;
+    const sw2Top = s.sw2 === 0;
+    const closed = exitTop === sw2Top;
+    if (!closed) return { closed: false, segments: [] };
+
+    const leftShuttle  = enterTop ? 't2-shuttle-al' : 't2-shuttle-bl';
+    const crossPath    = enterTop ? 't2-cross-1' : 't2-cross-2';
+    const rightShuttle = exitTop  ? 't2-shuttle-ar' : 't2-shuttle-br';
+    return {
+      closed: true,
+      segments: ['t2-phase', leftShuttle, crossPath, rightShuttle, 't2-return', 't2-neutral']
+    };
+  }
+
+  // 4pt
+  const enterTop    = s.sw1 === 0;
+  const afterCross1 = s.cross1 === 0 ? enterTop : !enterTop;
+  const afterCross2 = s.cross2 === 0 ? afterCross1 : !afterCross1;
+  const sw2Top      = s.sw2 === 0;
+  const closed      = afterCross2 === sw2Top;
   if (!closed) return { closed: false, segments: [] };
 
-  const leftShuttle  = enterTop ? 't2-shuttle-al' : 't2-shuttle-bl';
-  const crossPath    = enterTop ? 't2-cross-1' : 't2-cross-2';
-  const rightShuttle = exitTop  ? 't2-shuttle-ar' : 't2-shuttle-br';
+  const leftShuttle  = enterTop    ? 't3-shuttle-al' : 't3-shuttle-bl';
+  const cross1Path   = enterTop    ? 't3-cross1-1'   : 't3-cross1-2';
+  const midShuttle   = afterCross1 ? 't3-shuttle-am' : 't3-shuttle-bm';
+  const cross2Path   = afterCross1 ? 't3-cross2-1'   : 't3-cross2-2';
+  const rightShuttle = afterCross2 ? 't3-shuttle-ar' : 't3-shuttle-br';
   return {
     closed: true,
-    segments: ['t2-phase', leftShuttle, crossPath, rightShuttle, 't2-return', 't2-neutral']
+    segments: ['t3-phase', leftShuttle, cross1Path, midShuttle, cross2Path, rightShuttle, 't3-return', 't3-neutral']
   };
 }
 
-// ─── Update Circuit Visuals ───
+// ─── Actualizar visuales ───
 function updateCircuit(tabId) {
   const result = getActivePath(tabId);
   const tabEl = document.getElementById('tab-' + tabId);
 
-  // Update wires
   tabEl.querySelectorAll('.wire').forEach(w => {
     const isActive = result.closed && result.segments.includes(w.id);
     w.classList.toggle('active', isActive);
     w.classList.toggle('flowing', isActive);
   });
 
-  // Update lamp
-  const prefix = tabId === '2pt' ? 't1' : 't2';
+  const prefix = tabPrefix(tabId);
   const lamp = document.getElementById(prefix + '-lamp');
   lamp.classList.toggle('on', result.closed);
   lamp.classList.toggle('off', !result.closed);
 
-  // Update terminals & arms highlight
   updateTerminals(tabId, result);
-
-  // Update status panel
   updateStatus(tabId, result.closed);
-
-  // Update SVG labels
   updateSvgLabels(tabId);
 }
 
-// Highlight active terminals and arms
+// Resaltar terminales y brazos activos
 function updateTerminals(tabId, result) {
-  const prefix = tabId === '2pt' ? 't1' : 't2';
+  const prefix = tabPrefix(tabId);
   const s = state.switches[tabId];
 
-  // All terminal and arm elements for this tab
   ['sw1', 'sw2'].forEach(sw => {
     const armEl = document.getElementById(`${prefix}-${sw}-arm`);
     const tcEl = document.getElementById(`${prefix}-${sw}-tc`);
@@ -796,7 +923,6 @@ function updateTerminals(tabId, result) {
   });
 
   if (tabId === '3pt') {
-    // Crossover terminals
     const enterTop = s.sw1 === 0;
     const exitTop = s.cross === 0 ? enterTop : !enterTop;
     ['it', 'ib', 'ot', 'ob'].forEach(t => {
@@ -811,14 +937,48 @@ function updateTerminals(tabId, result) {
       el.classList.toggle('active-term', active);
     });
   }
+
+  if (tabId === '4pt') {
+    const enterTop    = s.sw1 === 0;
+    const afterCross1 = s.cross1 === 0 ? enterTop : !enterTop;
+    const afterCross2 = s.cross2 === 0 ? afterCross1 : !afterCross1;
+
+    ['it', 'ib', 'ot', 'ob'].forEach(t => {
+      const el = document.getElementById('t3-cr1-' + t);
+      let active = false;
+      if (result.closed) {
+        if (t === 'it') active = enterTop;
+        if (t === 'ib') active = !enterTop;
+        if (t === 'ot') active = afterCross1;
+        if (t === 'ob') active = !afterCross1;
+      }
+      el.classList.toggle('active-term', active);
+    });
+
+    ['it', 'ib', 'ot', 'ob'].forEach(t => {
+      const el = document.getElementById('t3-cr2-' + t);
+      let active = false;
+      if (result.closed) {
+        if (t === 'it') active = afterCross1;
+        if (t === 'ib') active = !afterCross1;
+        if (t === 'ot') active = afterCross2;
+        if (t === 'ob') active = !afterCross2;
+      }
+      el.classList.toggle('active-term', active);
+    });
+  }
 }
 
-// ─── Switch Toggling + Animation ───
+// ─── Conmutación + animación ───
 function toggleSwitch(tabId, key) {
   const s = state.switches[tabId];
   if (key === 'cross') {
     s.cross = 1 - s.cross;
-    animateCrossover(s.cross);
+    animateCrossover('t2-cross-1', 't2-cross-2', s.cross);
+  } else if (key === 'cross1' || key === 'cross2') {
+    s[key] = 1 - s[key];
+    const n = key === 'cross1' ? '1' : '2';
+    animateCrossover(`t3-cross${n}-1`, `t3-cross${n}-2`, s[key]);
   } else {
     s[key] = 1 - s[key];
     animateArm(tabId, key, s[key]);
@@ -826,9 +986,8 @@ function toggleSwitch(tabId, key) {
   updateCircuit(tabId);
 }
 
-// Animate switch arm (interpolate y2 between -25 and 25)
 function animateArm(tabId, key, newPos) {
-  const prefix = tabId === '2pt' ? 't1' : 't2';
+  const prefix = tabPrefix(tabId);
   const arm = document.getElementById(`${prefix}-${key}-arm`);
   const startY = parseFloat(arm.getAttribute('y2'));
   const endY = newPos === 0 ? -25 : 25;
@@ -844,18 +1003,13 @@ function animateArm(tabId, key, newPos) {
   })(t0);
 }
 
-// Animate crossover internal paths
-function animateCrossover(newState) {
-  const p1 = document.getElementById('t2-cross-1');
-  const p2 = document.getElementById('t2-cross-2');
+function animateCrossover(p1Id, p2Id, newState) {
+  const p1 = document.getElementById(p1Id);
+  const p2 = document.getElementById(p2Id);
 
-  // Parse current cp2Y and endY from each path
   const cur1 = parseCrossD(p1.getAttribute('d'));
   const cur2 = parseCrossD(p2.getAttribute('d'));
 
-  // Targets: straight → slight bow inward; crossed → full swap
-  // Path1 starts at y=-25: straight cp=-14/end=-25, crossed cp=25/end=25
-  // Path2 starts at y=25:  straight cp=14/end=25,   crossed cp=-25/end=-25
   const tgt1 = newState === 0 ? { cp: -14, end: -25 } : { cp: 25, end: 25 };
   const tgt2 = newState === 0 ? { cp: 14, end: 25 }   : { cp: -25, end: -25 };
 
@@ -877,65 +1031,75 @@ function animateCrossover(newState) {
   })(t0);
 }
 
-// Parse "M -67,Y C -17,Y 17,CP 67,END" → { cp, end }
 function parseCrossD(d) {
   const nums = d.match(/-?\d+\.?\d*/g);
-  // nums: [-67, startY, -17, ctrl1Y, 17, cp2Y, 67, endY]
   return { cp: parseFloat(nums[5]), end: parseFloat(nums[7]) };
 }
 
-// ─── Tab Switching ───
+// ─── Cambio de pestaña ───
 function switchTab(tabId) {
   if (state.tab === tabId) return;
   stopAutoplay();
   state.tab = tabId;
 
-  // Toggle SVG visibility
-  document.getElementById('tab-2pt').setAttribute('display', tabId === '2pt' ? '' : 'none');
-  document.getElementById('tab-3pt').setAttribute('display', tabId === '3pt' ? '' : 'none');
+  ['2pt', '3pt', '4pt'].forEach(t => {
+    document.getElementById('tab-' + t).setAttribute('display', t === tabId ? '' : 'none');
+  });
 
-  // Toggle tab buttons
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === tabId);
   });
 
-  // Toggle crossover status row
-  document.getElementById('st-cross-row').style.display = tabId === '3pt' ? '' : 'none';
+  const cross1Row = document.getElementById('st-cross1-row');
+  const cross2Row = document.getElementById('st-cross2-row');
+  const cross1Label = document.getElementById('st-cross1-label');
+
+  if (tabId === '2pt') {
+    cross1Row.style.display = 'none';
+    cross2Row.style.display = 'none';
+  } else if (tabId === '3pt') {
+    cross1Row.style.display = '';
+    cross2Row.style.display = 'none';
+    cross1Label.textContent = 'Conmutador:';
+  } else {
+    cross1Row.style.display = '';
+    cross2Row.style.display = '';
+    cross1Label.textContent = 'Conmutador 1:';
+  }
 
   updateCircuit(tabId);
 }
 
-// ─── Status Panel Update ───
+// ─── Panel de estado ───
 function updateStatus(tabId, closed) {
   const s = state.switches[tabId];
-  const posLabel = v => v === 0 ? 'Position A ↑' : 'Position B ↓';
-  const crossLabel = v => v === 0 ? 'Liaison droite' : 'Liaison croisée';
+  const posLabel = v => v === 0 ? 'Posición A ↑' : 'Posición B ↓';
+  const crossLabel = v => v === 0 ? 'Conexión directa' : 'Conexión cruzada';
 
-  const stSw1 = document.getElementById('st-sw1');
-  stSw1.textContent = posLabel(s.sw1);
-
-  const stSw2 = document.getElementById('st-sw2');
-  stSw2.textContent = posLabel(s.sw2);
+  document.getElementById('st-sw1').textContent = posLabel(s.sw1);
+  document.getElementById('st-sw2').textContent = posLabel(s.sw2);
 
   if (tabId === '3pt') {
-    const stCross = document.getElementById('st-cross');
-    stCross.textContent = crossLabel(s.cross);
+    document.getElementById('st-cross1').textContent = crossLabel(s.cross);
+  } else if (tabId === '4pt') {
+    document.getElementById('st-cross1').textContent = crossLabel(s.cross1);
+    document.getElementById('st-cross2').textContent = crossLabel(s.cross2);
   }
 
   const stCircuit = document.getElementById('st-circuit');
-  stCircuit.textContent = closed ? 'Fermé' : 'Ouvert';
+  stCircuit.textContent = closed ? 'Cerrado' : 'Abierto';
   stCircuit.className = 'st-val ' + (closed ? 'on' : 'off');
 
   const stLamp = document.getElementById('st-lamp');
-  stLamp.textContent = closed ? 'Allumée' : 'Éteinte';
+  stLamp.textContent = closed ? 'Encendida' : 'Apagada';
   stLamp.className = 'st-val ' + (closed ? 'on' : 'off');
 }
 
-// ─── SVG Labels Update ───
+// ─── Etiquetas SVG ───
 function updateSvgLabels(tabId) {
   const s = state.switches[tabId];
-  const prefix = tabId === '2pt' ? 't1' : 't2';
-  const posLabel = v => v === 0 ? 'Position A ↑' : 'Position B ↓';
+  const prefix = tabPrefix(tabId);
+  const posLabel = v => v === 0 ? 'Posición A ↑' : 'Posición B ↓';
 
   const sw1Lbl = document.getElementById(`${prefix}-sw1-lbl`);
   if (sw1Lbl) sw1Lbl.textContent = posLabel(s.sw1);
@@ -944,25 +1108,40 @@ function updateSvgLabels(tabId) {
 
   if (tabId === '3pt') {
     const crossLbl = document.getElementById('t2-cross-lbl');
-    if (crossLbl) crossLbl.textContent = s.cross === 0 ? 'Liaison droite ═══' : 'Liaison croisée ╳';
+    if (crossLbl) crossLbl.textContent = s.cross === 0 ? 'Conexión directa ═══' : 'Conexión cruzada ╳';
+  } else if (tabId === '4pt') {
+    const c1Lbl = document.getElementById('t3-cross1-lbl');
+    if (c1Lbl) c1Lbl.textContent = s.cross1 === 0 ? 'Conexión directa ═══' : 'Conexión cruzada ╳';
+    const c2Lbl = document.getElementById('t3-cross2-lbl');
+    if (c2Lbl) c2Lbl.textContent = s.cross2 === 0 ? 'Conexión directa ═══' : 'Conexión cruzada ╳';
   }
 }
 
-// ─── Autoplay ───
+// ─── Reproducción automática ───
 const AUTOPLAY_SEQ = {
   '2pt': [
-    { sw1: 0, sw2: 0 },  // ON
-    { sw1: 1, sw2: 0 },  // OFF — toggle sw1
-    { sw1: 1, sw2: 1 },  // ON  — toggle sw2
-    { sw1: 0, sw2: 1 },  // OFF — toggle sw1
+    { sw1: 0, sw2: 0 },
+    { sw1: 1, sw2: 0 },
+    { sw1: 1, sw2: 1 },
+    { sw1: 0, sw2: 1 },
   ],
   '3pt': [
-    { sw1: 0, cross: 0, sw2: 0 },  // ON
-    { sw1: 1, cross: 0, sw2: 0 },  // OFF — toggle sw1
-    { sw1: 1, cross: 1, sw2: 0 },  // ON  — toggle cross
-    { sw1: 1, cross: 1, sw2: 1 },  // OFF — toggle sw2
-    { sw1: 0, cross: 1, sw2: 1 },  // ON  — toggle sw1
-    { sw1: 0, cross: 0, sw2: 1 },  // OFF — toggle cross
+    { sw1: 0, cross: 0, sw2: 0 },
+    { sw1: 1, cross: 0, sw2: 0 },
+    { sw1: 1, cross: 1, sw2: 0 },
+    { sw1: 1, cross: 1, sw2: 1 },
+    { sw1: 0, cross: 1, sw2: 1 },
+    { sw1: 0, cross: 0, sw2: 1 },
+  ],
+  '4pt': [
+    { sw1: 0, cross1: 0, cross2: 0, sw2: 0 },
+    { sw1: 1, cross1: 0, cross2: 0, sw2: 0 },
+    { sw1: 1, cross1: 1, cross2: 0, sw2: 0 },
+    { sw1: 1, cross1: 1, cross2: 1, sw2: 0 },
+    { sw1: 1, cross1: 1, cross2: 1, sw2: 1 },
+    { sw1: 0, cross1: 1, cross2: 1, sw2: 1 },
+    { sw1: 0, cross1: 0, cross2: 1, sw2: 1 },
+    { sw1: 0, cross1: 0, cross2: 0, sw2: 1 },
   ]
 };
 
@@ -974,8 +1153,8 @@ function startAutoplay() {
   state.autoplay = true;
   state.autoIndex = -1;
   document.getElementById('btn-auto').classList.add('active-auto');
-  document.getElementById('btn-auto').textContent = 'Arrêter';
-  autoplayStep(); // first step immediately
+  document.getElementById('btn-auto').textContent = 'Detener';
+  autoplayStep();
   state.autoTimer = setInterval(autoplayStep, 1600);
 }
 
@@ -984,7 +1163,7 @@ function stopAutoplay() {
   clearInterval(state.autoTimer);
   state.autoTimer = null;
   document.getElementById('btn-auto').classList.remove('active-auto');
-  document.getElementById('btn-auto').textContent = 'Lecture automatique';
+  document.getElementById('btn-auto').textContent = 'Reproducción automática';
 }
 
 function autoplayStep() {
@@ -994,7 +1173,6 @@ function autoplayStep() {
   const target = seq[state.autoIndex];
   const current = state.switches[tabId];
 
-  // Find and toggle the switch that differs
   for (const key of Object.keys(target)) {
     if (current[key] !== target[key]) {
       toggleSwitch(tabId, key);
@@ -1003,22 +1181,17 @@ function autoplayStep() {
   }
 }
 
-// ─── Reset ───
+// ─── Reiniciar ───
 function resetCircuit() {
   stopAutoplay();
   const tabId = state.tab;
   const s = state.switches[tabId];
-  const keys = Object.keys(s);
-
-  // Animate each switch back to 0
-  keys.forEach(key => {
-    if (s[key] !== 0) {
-      toggleSwitch(tabId, key);
-    }
+  Object.keys(s).forEach(key => {
+    if (s[key] !== 0) toggleSwitch(tabId, key);
   });
 }
 
-// ─── Tooltip System ───
+// ─── Tooltips ───
 const tooltipEl = document.getElementById('tooltip');
 
 document.getElementById('circuit').addEventListener('mousemove', e => {
@@ -1027,11 +1200,9 @@ document.getElementById('circuit').addEventListener('mousemove', e => {
   tooltipEl.textContent = target.getAttribute('data-tooltip');
   tooltipEl.style.display = 'block';
 
-  // Position near cursor
   const pad = 14;
   let x = e.clientX + pad;
   let y = e.clientY + pad;
-  // Keep on screen
   const r = tooltipEl.getBoundingClientRect();
   if (x + r.width > window.innerWidth - 8) x = e.clientX - r.width - pad;
   if (y + r.height > window.innerHeight - 8) y = e.clientY - r.height - pad;
@@ -1043,11 +1214,11 @@ document.getElementById('circuit').addEventListener('mouseleave', () => {
   tooltipEl.style.display = 'none';
 });
 
-// ─── Utilities ───
+// ─── Utilidades ───
 function lerp(a, b, t) { return a + (b - a) * t; }
 function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
 
-// ─── Init ───
+// ─── Inicialización ───
 updateCircuit('2pt');
 </script>
 
