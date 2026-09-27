@@ -11,8 +11,11 @@ import { LampSymbol } from './parts/LampSymbol';
 import { Sources } from './parts/Sources';
 import styles from './Schematic.module.css';
 
-/** Smallest zoom at which texts stay readable on a phone. */
-const MIN_SCALE = 0.7;
+/**
+ * Smallest zoom of the drawing at Normal text size, where its texts stay readable on a phone.
+ * The floor grows with the text size setting (see `.frame` in Schematic.module.css).
+ */
+const MIN_SCALE = 0.85;
 
 export interface SchematicProps {
   readonly circuit: CircuitDefinition;
@@ -31,49 +34,54 @@ export function Schematic(props: SchematicProps) {
   const geometry = useMemo(() => layoutCircuit(circuit), [circuit]);
   const lampOn = circuit.lamps.some((lamp) => state.lampsOn.has(lamp.id));
 
+  const size = {
+    '--drawing-width': geometry.width,
+    '--drawing-height': geometry.height,
+    '--min-scale': MIN_SCALE,
+  } as CSSProperties;
+
   return (
-    <svg
-      className={styles.svg}
-      viewBox={`0 0 ${geometry.width} ${geometry.height}`}
-      aria-labelledby={titleId}
-      style={
-        { '--min-drawing-height': `${Math.round(geometry.height * MIN_SCALE)}px` } as CSSProperties
-      }
-    >
-      <title id={titleId}>{es.schematic.label(circuit.title)}</title>
-      {circuit.devices.map((device) => (
-        <DeviceSymbol
-          key={device.id}
-          device={device}
-          position={positions[device.id] ?? 0}
+    <div className={styles.frame} style={size}>
+      <svg
+        className={styles.svg}
+        viewBox={`0 0 ${geometry.width} ${geometry.height}`}
+        aria-labelledby={titleId}
+      >
+        <title id={titleId}>{es.schematic.label(circuit.title)}</title>
+        {circuit.devices.map((device) => (
+          <DeviceSymbol
+            key={device.id}
+            device={device}
+            position={positions[device.id] ?? 0}
+            geometry={geometry}
+            state={state}
+            showTension={showTension}
+            highlighted={device.id === highlightedDevice}
+          />
+        ))}
+        <ConductorLines
+          circuit={circuit}
           geometry={geometry}
           state={state}
           showTension={showTension}
-          highlighted={device.id === highlightedDevice}
         />
-      ))}
-      <ConductorLines
-        circuit={circuit}
-        geometry={geometry}
-        state={state}
-        showTension={showTension}
-      />
-      <Sources sources={geometry.sources} />
-      <LampSymbol lamp={geometry.lamp} on={lampOn} />
-      <Labels circuit={circuit} geometry={geometry} positions={positions} />
-      {circuit.devices.map((device) => {
-        const area = geometry.devices.get(device.id)?.hitArea;
-        if (!area) return null;
-        const stateText = deviceStateText(device, positions[device.id] ?? 0);
-        return (
-          <DeviceHitArea
-            key={device.id}
-            area={area}
-            label={es.schematic.tapToChange(device.name, stateText)}
-            onActivate={() => onToggle(device.id)}
-          />
-        );
-      })}
-    </svg>
+        <Sources sources={geometry.sources} />
+        <LampSymbol lamp={geometry.lamp} on={lampOn} />
+        <Labels circuit={circuit} geometry={geometry} positions={positions} />
+        {circuit.devices.map((device) => {
+          const area = geometry.devices.get(device.id)?.hitArea;
+          if (!area) return null;
+          const stateText = deviceStateText(device, positions[device.id] ?? 0);
+          return (
+            <DeviceHitArea
+              key={device.id}
+              area={area}
+              label={es.schematic.tapToChange(device.name, stateText)}
+              onActivate={() => onToggle(device.id)}
+            />
+          );
+        })}
+      </svg>
+    </div>
   );
 }

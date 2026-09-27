@@ -1,5 +1,6 @@
 .group {
   display: flex;
+  flex-wrap: wrap;
   min-width: 0;
   margin: 0;
   gap: var(--space-1);
@@ -10,7 +11,13 @@
 }
 
 .option {
-  flex: 1;
+  /*
+   * Equal widths; a label wraps between words first, and only when even the longest words
+   * no longer fit side by side do options move to a new row. Never wider than the screen.
+   */
+  flex: 1 1 0;
+  min-width: min-content;
+  overflow-wrap: break-word;
   min-height: var(--tap-min);
   padding: 4px 10px;
   border: 0;

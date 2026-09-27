@@ -6,18 +6,18 @@ import type { DeviceGeometry, Point, SchematicGeometry, TextMark } from './types
 const G = {
   width: 330,
   axisX: 96,
-  top: 22,
-  lead: 26,
+  top: 16,
+  lead: 22,
   bridgeGap: 36,
   bridgeHalf: 26,
   bodyWidth: 82,
   bodyPad: 8,
   combinacionHeight: 50,
   cruceHeight: 58,
-  returnLength: 32,
+  returnLength: 26,
   lampRadius: 19,
-  neutralLead: 28,
-  bottom: 20,
+  neutralLead: 24,
+  bottom: 12,
   labelGap: 16,
 } as const;
 

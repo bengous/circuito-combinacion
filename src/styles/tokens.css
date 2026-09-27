@@ -16,10 +16,20 @@
   --radius-lg: 18px;
   --tap-min: 44px;
   --tap-lg: 52px;
+
+  /* Height of the screen with the browser bars shown (iOS Safari), stable while scrolling. */
+  --viewport-height: 100vh;
+
   --wire-phase: #e53935;
   --wire-neutral: #29a8e0;
   --wire-return: #f28c28;
   --wire-bridge: #9c5bd9;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --viewport-height: 100svh;
+  }
 }
 
 :root,

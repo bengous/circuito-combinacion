@@ -1,0 +1,7 @@
+.circuitTitle {
+  color: var(--muted);
+}
+
+.circuitTitle strong {
+  color: var(--ink);
+}
