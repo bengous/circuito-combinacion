@@ -1,0 +1,11 @@
+# Git hooks, installed automatically by `npm install`.
+pre-commit:
+  commands:
+    biome:
+      glob: '*.{js,ts,tsx,json,css}'
+      run: npx biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+pre-push:
+  commands:
+    check:
+      run: npm run check
