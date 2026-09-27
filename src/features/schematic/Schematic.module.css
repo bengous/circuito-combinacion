@@ -23,6 +23,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Without container query units (iOS < 16), keep the floor alone rather than none. */
+@supports not (width: 1cqi) {
+  .svg {
+    min-height: var(--floor);
+  }
+}
+
 /* ── Cables ── */
 .wire {
   fill: none;
