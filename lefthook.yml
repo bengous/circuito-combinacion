@@ -2,9 +2,13 @@
 pre-commit:
   commands:
     biome:
-      glob: '*.{js,ts,tsx,json,css}'
+      glob: '*.{js,mjs,ts,tsx,json,css}'
       run: npx biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
+commit-msg:
+  commands:
+    conventional:
+      run: node scripts/check-commit-msg.mjs {1}
 pre-push:
   commands:
     check:
