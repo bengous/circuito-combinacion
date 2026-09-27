@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 /** Mirrors MIN_SCALE in src/features/schematic/Schematic.tsx. */
-export const MIN_SCALE = 0.85;
+const MIN_SCALE = 0.85;
 /** Mirrors TEXT_SCALE in src/features/settings/settings.ts. */
 export const TEXT_SCALE = { normal: 1, large: 1.15, huge: 1.3 } as const;
 /** Smallest comfortable tap target (Apple HIG, WCAG 2.5.5). */

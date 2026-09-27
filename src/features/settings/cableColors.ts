@@ -6,7 +6,7 @@ import type { Theme, ThemedColor } from './theme';
  * values are darker. Every value keeps at least 3:1 against its theme's background and
  * switch body (WCAG 1.4.11), even faded; `cableColors.test.ts` checks it.
  */
-export const CABLE_COLORS = {
+const CABLE_COLORS = {
   rojo: { night: '#E53935', day: '#E53935' },
   marron: { night: '#B0703E', day: '#B0703E' },
   naranja: { night: '#F28C28', day: '#B86200' },
