@@ -12,7 +12,7 @@ L'ancienne version reste accessible dans `public/legacy/combinacion-v1.html`.
 
 ## Démarrer
 
-Node 22 ou plus (voir `.nvmrc`).
+Node 24 ou plus (voir `.nvmrc`).
 
 ```sh
 npm install      # installe aussi les hooks git (lefthook)
