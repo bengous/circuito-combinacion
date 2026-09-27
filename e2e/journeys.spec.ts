@@ -1,4 +1,4 @@
-import { expect, openCircuit, schematic, test } from './fixtures';
+import { CIRCUITS, expect, openCircuit, schematic, test } from './fixtures';
 
 test.use({ viewport: { width: 390, height: 664 } });
 
@@ -31,6 +31,13 @@ test('the picker changes the circuit and the address', async ({ page }) => {
   await expect(page).toHaveURL(/#combinacion-dos-cruces$/);
   await expect(picker.getByRole('button', { name: '4 puntos' })).toBeFocused();
   await expect(page.getByRole('button', { name: /^Cruce 2/ })).toBeVisible();
+});
+
+test('every circuit of the menu is covered by this suite', async ({ page }) => {
+  await openCircuit(page, 'combinacion-simple');
+  const options = page.getByRole('group', { name: 'Puntos de control' }).getByRole('button');
+  // A new circuit in src/domain/catalog must be added to CIRCUITS in e2e/fixtures.ts.
+  await expect(options).toHaveText(CIRCUITS.map((c) => `${c.points} puntos`));
 });
 
 test('a broken link opens the first circuit', async ({ page }) => {
