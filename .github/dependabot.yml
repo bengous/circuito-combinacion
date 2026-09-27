@@ -1,0 +1,32 @@
+# Weekly update PRs, grouped so there are few of them to review.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+      include: scope
+    groups:
+      # Patch and minor updates of all tooling in one PR.
+      dev-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
+      # React and friends, fonts: runtime code, reviewed apart.
+      runtime:
+        dependency-type: production
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ['*']
