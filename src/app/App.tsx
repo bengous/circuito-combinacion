@@ -1,10 +1,13 @@
 import { SettingsProvider } from '@/features/settings/SettingsProvider';
 import { SimulatorScreen } from '@/features/simulator/SimulatorScreen';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export function App() {
   return (
-    <SettingsProvider>
-      <SimulatorScreen />
-    </SettingsProvider>
+    <ErrorBoundary>
+      <SettingsProvider>
+        <SimulatorScreen />
+      </SettingsProvider>
+    </ErrorBoundary>
   );
 }

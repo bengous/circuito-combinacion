@@ -51,4 +51,10 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /^Llave 2/ }));
     expect(screen.queryByText(/Ojo:/)).not.toBeInTheDocument();
   });
+
+  it('opens a broken link on the first circuit instead of a blank page', () => {
+    window.location.hash = '#%E0%A4%A';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: 'Combinación simple' })).toBeInTheDocument();
+  });
 });
