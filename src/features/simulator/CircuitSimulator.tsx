@@ -45,9 +45,7 @@ export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinit
   return (
     <>
       <StageRegion area="summary">
-        <p className={styles.circuitTitle}>
-          <strong>{circuit.title}</strong>
-        </p>
+        <h2 className={styles.circuitTitle}>{circuit.title}</h2>
         <Legend />
       </StageRegion>
       <StageRegion area="stage">
@@ -61,7 +59,7 @@ export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinit
         />
       </StageRegion>
       <StageRegion area="panel">
-        <MessagePanel message={message} />
+        <MessagePanel message={message} quiet={demo.running} />
         <StatusBar
           lampOn={lampOn}
           demoRunning={demo.running}
