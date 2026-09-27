@@ -9,7 +9,7 @@ interface WireLineProps {
   readonly look: WireStyle;
 }
 
-export function toPath(points: readonly Point[]): string {
+function toPath(points: readonly Point[]): string {
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
 

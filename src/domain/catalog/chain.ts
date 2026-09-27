@@ -20,9 +20,9 @@ export interface ChainSpec {
   readonly stages: readonly ChainStage[];
 }
 
-export const PHASE: TerminalId = 'L';
-export const NEUTRAL: TerminalId = 'N';
-export const LAMP_ID = 'lampara';
+const PHASE: TerminalId = 'L';
+const NEUTRAL: TerminalId = 'N';
+const LAMP_ID = 'lampara';
 const SIDES = ['A', 'B'] as const;
 
 /** Terminal where a bridge leaves a stage (towards the lamp). */

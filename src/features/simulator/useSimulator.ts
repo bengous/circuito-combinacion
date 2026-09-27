@@ -13,7 +13,7 @@ export type SimulatorAction =
   | { readonly type: 'reset' }
   | { readonly type: 'show'; readonly positions: Positions; readonly lastMoved: string | null };
 
-export function simulatorReducer(circuit: CircuitDefinition) {
+function simulatorReducer(circuit: CircuitDefinition) {
   return (state: SimulatorState, action: SimulatorAction): SimulatorState => {
     switch (action.type) {
       case 'toggle':

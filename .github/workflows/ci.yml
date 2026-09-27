@@ -26,6 +26,8 @@ jobs:
         run: npm run typecheck
       - name: Lint and format
         run: npx biome ci --error-on-warnings .
+      - name: Unused files, exports and dependencies
+        run: npm run lint:unused
       - name: File size
         run: npm run check:size
       - name: Tests with coverage thresholds
