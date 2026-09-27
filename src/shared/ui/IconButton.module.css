@@ -1,0 +1,16 @@
+.button {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.button svg {
+  width: 24px;
+  height: 24px;
+}
