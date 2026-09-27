@@ -28,7 +28,7 @@ export function LampSymbol({ lamp, on }: LampSymbolProps) {
         className={styles.lampCross}
         d={`M${-arm},${-arm} L${arm},${arm} M${-arm},${arm} L${arm},${-arm}`}
       />
-      <title>{es.schematic.lamp}</title>
+      <title>{on ? es.status.lampOn : es.status.lampOff}</title>
     </g>
   );
 }

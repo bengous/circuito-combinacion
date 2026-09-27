@@ -42,9 +42,11 @@ export function Schematic(props: SchematicProps) {
 
   return (
     <div className={styles.frame} style={size}>
+      {/* biome-ignore lint/a11y/useSemanticElements: an <svg> cannot be a <fieldset>. The group role makes its name (the <title>) announced. */}
       <svg
         className={styles.svg}
         viewBox={`0 0 ${geometry.width} ${geometry.height}`}
+        role="group"
         aria-labelledby={titleId}
       >
         <title id={titleId}>{es.schematic.label(circuit.title)}</title>
