@@ -36,6 +36,8 @@
   flex: 1;
   min-height: 0;
   display: grid;
+  /* minmax(0, …): never let content widen the page past the screen. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 10px;
 }
@@ -78,11 +80,13 @@
 
 .statusBar {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .lampStatus {
-  flex: 1;
+  /* Takes its own line when the buttons no longer fit beside it (large text). */
+  flex: 1 1 11em;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -113,6 +117,7 @@
 }
 
 .action {
+  flex: 1 0 auto;
   min-height: 52px;
   padding: 0 14px;
   border: 1px solid var(--line);

@@ -42,6 +42,7 @@ export const es = {
     open: 'Ajustes',
     title: 'Ajustes',
     close: 'Cerrar',
+    done: 'Listo',
     theme: 'Tema',
     themes: { night: 'Noche', day: 'Día' },
     toggleTheme: (next: string) => `Cambiar a tema ${next.toLowerCase()}`,

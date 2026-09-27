@@ -1,41 +1,80 @@
+/*
+ * Centered sheet that always fits the visible screen. "svh" is the viewport with the
+ * browser bars shown, so iOS Safari's toolbars never cover it. Only the middle part
+ * scrolls: the title with its close button and the "Listo" button stay visible.
+ */
 .dialog {
-  width: min(100%, 520px);
-  max-height: 92dvh;
-  margin: auto auto 0;
-  padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  width: min(100% - 24px, 520px);
+  max-width: none;
+  max-height: calc(
+    100svh -
+    24px -
+    env(safe-area-inset-top, 0px) -
+    env(safe-area-inset-bottom, 0px)
+  );
+  margin: auto;
+  padding: 0;
   border: 1px solid var(--line);
-  border-radius: 18px 18px 0 0;
+  border-radius: 18px;
   background: var(--panel);
   color: var(--ink);
-  overflow-y: auto;
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog::backdrop {
   background: rgb(0 0 0 / 0.55);
 }
 
-@media (min-width: 700px) {
-  .dialog {
-    margin: auto;
-    border-radius: 18px;
-  }
-}
-
 .header {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  padding: 12px 12px 12px 16px;
+  border-bottom: 1px solid var(--line);
 }
 
 .header h2 {
   font-size: 1.4rem;
 }
 
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 16px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.footer {
+  flex: none;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+}
+
+.done {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .section {
   display: grid;
   gap: 10px;
   padding-block: 14px;
+}
+
+.section + .section {
   border-top: 1px solid var(--line);
 }
 
