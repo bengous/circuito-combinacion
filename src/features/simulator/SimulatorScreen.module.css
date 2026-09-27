@@ -118,20 +118,6 @@
 
 .action {
   flex: 1 0 auto;
-  min-height: 52px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
-  color: var(--ink);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.action[aria-pressed="true"] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
 }
 
 @media (min-width: 900px) {

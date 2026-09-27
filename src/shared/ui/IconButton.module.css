@@ -4,7 +4,7 @@
   width: 46px;
   height: 46px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--panel);
   color: var(--ink);
   cursor: pointer;

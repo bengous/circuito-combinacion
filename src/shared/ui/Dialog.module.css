@@ -1,0 +1,57 @@
+/*
+ * Centered sheet that always fits the visible screen (--viewport-height: the viewport with
+ * the browser bars shown, so iOS Safari's toolbars never cover it). It keeps clear of the
+ * notch and the home indicator. Only the middle part scrolls: the title with its close
+ * button and the footer stay visible.
+ */
+.dialog {
+  --inset-x: calc(env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+  --inset-y: calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+  width: min(100% - 24px - var(--inset-x), 520px);
+  max-width: none;
+  max-height: calc(var(--viewport-height) - 24px - var(--inset-y));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+.header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  font-size: 1.4rem;
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 var(--space-4) var(--space-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.footer {
+  flex: none;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line);
+}

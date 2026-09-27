@@ -6,6 +6,16 @@
 :root {
   --font: "Barlow", "Segoe UI", system-ui, sans-serif;
   --text-scale: 1;
+
+  /* Sizes shared by every component. Tap targets follow Apple's 44pt minimum. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --tap-min: 44px;
+  --tap-lg: 52px;
   --wire-phase: #e53935;
   --wire-neutral: #29a8e0;
   --wire-return: #f28c28;
