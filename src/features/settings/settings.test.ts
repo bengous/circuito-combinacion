@@ -1,3 +1,4 @@
+import { cableColor } from './cableColors';
 import { applySettings, loadSettings, saveSettings } from './persistence';
 import { DEFAULT_SETTINGS, parseSettings } from './settings';
 
@@ -36,5 +37,30 @@ describe('persistence', () => {
     expect(root.dataset.theme).toBe('night');
     expect(root.style.getPropertyValue('--text-scale')).toBe('1.3');
     expect(root.style.getPropertyValue('--wire-phase')).toBe('#E53935');
+  });
+
+  it('uses the day value of each cable colour in the day theme', () => {
+    const root = document.createElement('div');
+    applySettings({ ...DEFAULT_SETTINGS, theme: 'day' }, root);
+    expect(root.style.getPropertyValue('--wire-neutral')).toBe(cableColor('celeste', 'day'));
+    expect(root.style.getPropertyValue('--wire-return')).toBe('#B86200');
+  });
+
+  it('makes the browser bars follow the theme background', () => {
+    const style = document.createElement('style');
+    style.textContent = ':root { --bg: #0b1626 } :root[data-theme="day"] { --bg: #f6f8fa }';
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = '#0b1626';
+    document.head.append(style, meta);
+    try {
+      applySettings({ ...DEFAULT_SETTINGS, theme: 'day' });
+      expect(meta.content).toBe('#f6f8fa');
+      applySettings(DEFAULT_SETTINGS);
+      expect(meta.content).toBe('#0b1626');
+    } finally {
+      style.remove();
+      meta.remove();
+    }
   });
 });

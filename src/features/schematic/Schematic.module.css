@@ -29,7 +29,7 @@
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.4;
+  opacity: var(--wire-faded-opacity);
   transition:
     stroke 0.25s,
     opacity 0.25s;
@@ -134,7 +134,8 @@
 }
 .lamp[data-on="true"] .lampGlass {
   fill: var(--lamp-core);
-  stroke: var(--lamp);
+  stroke: var(--lamp-ring);
+  stroke-width: 2.5;
 }
 .lamp[data-on="true"] .lampCross {
   stroke: var(--lamp-filament);

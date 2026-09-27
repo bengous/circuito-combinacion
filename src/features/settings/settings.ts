@@ -1,7 +1,7 @@
 import type { ConductorRole } from '@/domain/circuit';
 import { type CableColorId, isCableColor } from './cableColors';
+import { THEMES, type Theme } from './theme';
 
-export type Theme = 'night' | 'day';
 export type TextSize = 'normal' | 'large' | 'huge';
 export type WireColors = Readonly<Record<ConductorRole, CableColorId>>;
 
@@ -47,7 +47,7 @@ export function parseSettings(raw: unknown): Settings {
   ) as Record<ConductorRole, CableColorId>;
 
   return {
-    theme: isOneOf<Theme>(['night', 'day'], theme) ? theme : DEFAULT_SETTINGS.theme,
+    theme: isOneOf(THEMES, theme) ? theme : DEFAULT_SETTINGS.theme,
     textSize: isOneOf<TextSize>(['normal', 'large', 'huge'], textSize)
       ? textSize
       : DEFAULT_SETTINGS.textSize,

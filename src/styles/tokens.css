@@ -1,7 +1,11 @@
 /*
  * Design tokens. Two themes, chosen in the settings:
  * night (blueprint, the original look) and day (high contrast, readable in sunlight).
- * Cable colours (--wire-phase, ...) and --text-scale are set from the settings at runtime.
+ * Cable colours (--wire-phase, ...) and --text-scale are set from the settings at runtime
+ * (the palette is in features/settings/cableColors.ts).
+ *
+ * Contrast rules, checked by tokens.test.ts for both themes: text >= 4.5:1, and every
+ * graphic needed to read the schematic (cables, terminals, lamp ring...) >= 3:1.
  */
 :root {
   --font: "Barlow", "Segoe UI", system-ui, sans-serif;
@@ -24,6 +28,9 @@
   --wire-neutral: #29a8e0;
   --wire-return: #f28c28;
   --wire-bridge: #9c5bd9;
+
+  /* Idle cables are drawn a little faded; the colours above stay >= 3:1 even so. */
+  --wire-faded-opacity: 0.9;
 }
 
 @supports (height: 100svh) {
@@ -44,11 +51,12 @@
   --device-stroke: #3e6c98;
   --terminal: #7f97b0;
   --arm: #d5e1ee;
-  --wire-dead: #2c4262;
+  --wire-dead: #56759b;
   --accent: #2ee0a6;
   --accent-ink: #062117;
   --focus: #ffd54f;
   --lamp: #ffd54f;
+  --lamp-ring: #ffd54f;
   --lamp-core: #fff6d6;
   --lamp-filament: #e07b00;
   --danger: #ff7a7a;
@@ -65,11 +73,12 @@
   --device-stroke: #5e7489;
   --terminal: #7a8b9c;
   --arm: #1b2733;
-  --wire-dead: #c2ccd6;
+  --wire-dead: #72808f;
   --accent: #0b7a55;
   --accent-ink: #ffffff;
   --focus: #1d55b0;
   --lamp: #f5b400;
+  --lamp-ring: #b27f00;
   --lamp-core: #fff3c4;
   --lamp-filament: #b25a00;
   --danger: #c62828;

@@ -1,16 +1,19 @@
 import type { ConductorRole } from '@/domain/circuit';
 import { es } from '@/i18n/es';
-import { CABLE_COLOR_IDS, CABLE_COLORS, type CableColorId } from './cableColors';
+import { CABLE_COLOR_IDS, type CableColorId, cableColor } from './cableColors';
 import styles from './SettingsDialog.module.css';
+import type { Theme } from './theme';
 
 interface WireColorPickerProps {
   readonly role: ConductorRole;
+  /** Swatches show the colour as drawn in this theme. */
+  readonly theme: Theme;
   readonly value: CableColorId;
   readonly onChange: (color: CableColorId) => void;
 }
 
 /** One row of colour swatches for a cable role. Native radios keep it keyboard friendly. */
-export function WireColorPicker({ role, value, onChange }: WireColorPickerProps) {
+export function WireColorPicker({ role, theme, value, onChange }: WireColorPickerProps) {
   const name = `wire-color-${role}`;
   return (
     <fieldset className={styles.colorRow}>
@@ -26,7 +29,7 @@ export function WireColorPicker({ role, value, onChange }: WireColorPickerProps)
               onChange={() => onChange(color)}
               aria-label={es.colors[color]}
             />
-            <span style={{ background: CABLE_COLORS[color] }} />
+            <span style={{ background: cableColor(color, theme) }} />
           </label>
         ))}
       </div>

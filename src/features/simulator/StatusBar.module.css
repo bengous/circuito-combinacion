@@ -37,7 +37,9 @@
 
 .lampStatus[data-on="true"] .lampDot {
   background: var(--lamp);
-  box-shadow: 0 0 10px var(--lamp);
+  box-shadow:
+    0 0 0 2px var(--lamp-ring),
+    0 0 10px var(--lamp);
 }
 
 .action {
