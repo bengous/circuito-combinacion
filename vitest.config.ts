@@ -8,7 +8,8 @@ export default mergeConfig(
       globals: true,
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
-      css: { modules: { classNameStrategy: 'non-scoped' } },
+      // tokens.css is processed so that tests can read it with `?raw` (see src/test/themeTokens.ts).
+      css: { include: [/tokens\.css/], modules: { classNameStrategy: 'non-scoped' } },
     },
   }),
 );

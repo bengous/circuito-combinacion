@@ -3,8 +3,9 @@ import { Button } from '@/shared/ui/Button';
 import { Dialog } from '@/shared/ui/Dialog';
 import { SegmentedControl } from '@/shared/ui/SegmentedControl';
 import styles from './SettingsDialog.module.css';
-import { ROLES, type TextSize, type Theme } from './settings';
+import { ROLES, type TextSize } from './settings';
 import { useSettings } from './settingsContext';
+import { THEMES } from './theme';
 import { WireColorPicker } from './WireColorPicker';
 
 interface SettingsDialogProps {
@@ -12,7 +13,6 @@ interface SettingsDialogProps {
   readonly onClose: () => void;
 }
 
-const THEMES: readonly Theme[] = ['night', 'day'];
 const TEXT_SIZES: readonly TextSize[] = ['normal', 'large', 'huge'];
 
 /** Every setting in one sheet. Changes apply immediately. */
@@ -71,6 +71,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           <WireColorPicker
             key={role}
             role={role}
+            theme={settings.theme}
             value={settings.wireColors[role]}
             onChange={(color) => update({ wireColors: { ...settings.wireColors, [role]: color } })}
           />

@@ -15,6 +15,9 @@ interface DeviceSymbolProps {
   readonly highlighted: boolean;
 }
 
+/** A live terminal is drawn larger, so tension is not told by colour alone. */
+const TERMINAL_RADIUS = { idle: 5.5, live: 7.5 } as const;
+
 /** Body, moving parts and terminals of one switch. */
 export function DeviceSymbol(props: DeviceSymbolProps) {
   const { device, geometry, state, showTension, highlighted } = props;
@@ -29,14 +32,15 @@ export function DeviceSymbol(props: DeviceSymbolProps) {
       {DEVICE_KINDS[device.kind].terminals.map((name) => {
         const id = terminalOf(device.id, name);
         const point = pointOf(geometry, id);
+        const live = showTension && state.live.has(id);
         return (
           <circle
             key={name}
             className={styles.terminal}
-            data-live={showTension && state.live.has(id)}
+            data-live={live}
             cx={point.x}
             cy={point.y}
-            r={5.5}
+            r={live ? TERMINAL_RADIUS.live : TERMINAL_RADIUS.idle}
           />
         );
       })}
