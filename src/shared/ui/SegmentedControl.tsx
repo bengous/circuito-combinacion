@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import styles from './SegmentedControl.module.css';
+import { VisuallyHidden } from './VisuallyHidden';
 
 export interface SegmentOption<T extends string> {
   readonly value: T;
@@ -14,12 +15,12 @@ interface SegmentedControlProps<T extends string> {
   readonly onChange: (value: T) => void;
 }
 
-/** A row of mutually exclusive buttons, large enough for a thumb. */
+/** A row of mutually exclusive buttons, large enough for a thumb. A named group. */
 export function SegmentedControl<T extends string>(props: SegmentedControlProps<T>) {
   const { label, options, value, onChange } = props;
   return (
     <fieldset className={styles.group}>
-      <legend className={styles.label}>{label}</legend>
+      <VisuallyHidden as="legend">{label}</VisuallyHidden>
       {options.map((option) => (
         <button
           key={option.value}

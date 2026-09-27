@@ -1,4 +1,5 @@
 import { es } from '@/i18n/es';
+import { Button } from '@/shared/ui/Button';
 import styles from './SimulatorScreen.module.css';
 
 interface StatusBarProps {
@@ -16,17 +17,17 @@ export function StatusBar({ lampOn, demoRunning, onReset, onToggleDemo }: Status
         <span className={styles.lampDot} aria-hidden="true" />
         {lampOn ? es.status.lampOn : es.status.lampOff}
       </output>
-      <button type="button" className={styles.action} onClick={onReset}>
+      <Button className={styles.action} onClick={onReset}>
         {es.status.reset}
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
         className={styles.action}
+        active={demoRunning}
         aria-pressed={demoRunning}
         onClick={onToggleDemo}
       >
         {demoRunning ? es.status.stopDemo : es.status.demo}
-      </button>
+      </Button>
     </div>
   );
 }
