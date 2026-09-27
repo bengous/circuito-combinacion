@@ -21,9 +21,14 @@
    ```
 
 2. L'ajouter à la liste `CATALOG` dans `src/domain/catalog/index.ts`.
+3. L'ajouter à `CIRCUITS` dans `e2e/fixtures.ts` (un test E2E échoue sinon).
+4. Vérifier : `npm run check`, puis `npm run test:e2e` (le nouveau schéma passe dans toute
+   la matrice d'écrans : s'il est plus haut, la page défile, le dessin ne doit pas être
+   écrasé).
 
-C'est tout : le dessin, le menu, la démo et les tests exhaustifs
-(`solve.test.ts`, `positions.test.ts`, `layout.test.ts`) le prennent en compte automatiquement.
+Le dessin, le menu, la démo et les tests exhaustifs (`solve.test.ts`, `positions.test.ts`,
+`layout.test.ts`) le prennent en compte automatiquement. Pour 5 points ou plus, vérifier
+à 320×568 que le sélecteur (« 5 puntos ») reste lisible.
 
 ## Un autre type de circuit (telerruptor, sensor…)
 
@@ -36,4 +41,7 @@ C'est tout : le dessin, le menu, la démo et les tests exhaustifs
    et sa stratégie dans `features/schematic/geometry/`, puis le symbole de l'appareil dans
    `features/schematic/parts/` et son aiguillage dans `DeviceSymbol.tsx`.
 4. **Les textes** dans `src/i18n/es.ts`.
-5. **Les tests** : au minimum, vérifier dans quelles positions la lampe s'allume.
+5. **Les tests** : au minimum, vérifier dans quelles positions la lampe s'allume ; ajouter
+   le circuit à `e2e/fixtures.ts`.
+6. **Une ADR** (`docs/adr/`) si le choix structure le projet (nouvelle géométrie, nouveau
+   type de charge).
