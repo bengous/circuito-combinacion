@@ -1,5 +1,5 @@
+import styles from './MessagePanel.module.css';
 import type { Message } from './message';
-import styles from './SimulatorScreen.module.css';
 
 /** Plain-language explanation of what the schematic shows. Read out by screen readers. */
 export function MessagePanel({ message }: { readonly message: Message }) {

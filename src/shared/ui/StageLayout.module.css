@@ -1,0 +1,64 @@
+/*
+ * Layout rules (one place, no scattered tweaks):
+ *
+ * 1. Portrait phone and portrait tablet: one column, in reading order
+ *    toolbar, summary, stage, panel. The stage takes the height left on the screen.
+ * 2. Landscape phone (short screen) and anything 900px wide or more: two columns,
+ *    stage on the left, the other areas stacked in a side column on the right.
+ * 3. Never squeezed: the stage is at least as tall as its content's floor (the drawing
+ *    sets it, see Schematic.module.css); when everything does not fit, the page scrolls.
+ * 4. Large text: the side column is sized in rem, so it widens with the text size setting
+ *    (the root font size), within half the width so the stage keeps room.
+ *
+ * minmax(0, …) columns: content can never widen the page past the screen.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    "toolbar"
+    "summary"
+    "stage"
+    "panel";
+  gap: var(--space-2);
+}
+
+.toolbar {
+  grid-area: toolbar;
+  min-width: 0;
+}
+
+.summary {
+  grid-area: summary;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stage {
+  grid-area: stage;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.panel {
+  grid-area: panel;
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+@media (min-width: 900px), (orientation: landscape) and (min-width: 560px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) clamp(16rem, 50%, 24rem);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "stage toolbar"
+      "stage summary"
+      "stage panel";
+    column-gap: 20px;
+  }
+}

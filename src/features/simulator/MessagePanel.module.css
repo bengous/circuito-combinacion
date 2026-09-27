@@ -1,0 +1,13 @@
+.message {
+  /* Room for three lines, so the page moves less when the text changes. */
+  min-height: 4.2em;
+  padding: 10px var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.warning {
+  color: var(--danger);
+  font-weight: 700;
+}

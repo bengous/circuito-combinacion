@@ -50,6 +50,29 @@ dans `devices.ts` sans toucher au solveur.
 
 Le style d'un fil (couleur, animation) est décidé dans `wireStyle.ts`, testé à part.
 
+## La mise en page
+
+Deux primitives de `shared/ui` portent toutes les règles de mise en page ; les écrans ne
+réinventent pas leurs propres media queries :
+
+- **`AppShell`** : le cadre de la page. Au moins un écran de haut (`min-height`, jamais une
+  hauteur fixe) : quand tout ne tient pas, **la page défile**, rien n'est écrasé. Marges
+  hors de l'encoche et de la barre d'accueil (`env(safe-area-inset-*)`).
+- **`StageLayout`** + **`StageRegion`** : quatre zones, `toolbar`, `summary`, `stage`, `panel`.
+  - téléphone en portrait (et tablette en portrait) : une colonne, dans cet ordre ;
+  - téléphone en paysage et écrans de 900 px ou plus : le `stage` à gauche, les autres
+    zones dans une colonne latérale à droite ;
+  - le `stage` prend la hauteur qui reste, sans descendre sous le **plancher** fixé par son
+    contenu ;
+  - grand texte : la colonne latérale est en `rem`, elle s'élargit avec la taille du texte.
+
+Le dessin fixe son plancher lui-même (`.frame` dans `Schematic.module.css`) :
+taille naturelle × `MIN_SCALE` (0,85) × taille du texte, limité par la largeur disponible.
+Avec « Muy grande », le dessin grandit donc vraiment (et la page défile).
+
+`--viewport-height` (dans `tokens.css`) vaut `100svh` (écran avec les barres de Safari
+affichées, stable pendant le défilement), avec `100vh` pour les navigateurs plus anciens.
+
 ## Conventions
 
 - **Fichiers courts** : 200 lignes maximum dans `src/` (`npm run check:size`). Au-delà, découper.

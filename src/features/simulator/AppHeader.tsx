@@ -4,7 +4,7 @@ import { useSettings } from '@/features/settings/settingsContext';
 import { es } from '@/i18n/es';
 import { IconButton } from '@/shared/ui/IconButton';
 import { MoonIcon, SettingsIcon, SunIcon } from '@/shared/ui/icons';
-import styles from './SimulatorScreen.module.css';
+import styles from './AppHeader.module.css';
 
 /** App title, quick theme switch and settings. */
 export function AppHeader() {
@@ -15,7 +15,7 @@ export function AppHeader() {
   return (
     <header className={styles.header}>
       <h1 className={styles.title}>{es.appName}</h1>
-      <div className={styles.headerActions}>
+      <div className={styles.actions}>
         <IconButton
           label={es.settings.toggleTheme(es.settings.themes[nextTheme])}
           onClick={() => update({ theme: nextTheme })}

@@ -2,15 +2,19 @@ import { useCallback } from 'react';
 import type { CircuitDefinition } from '@/domain/circuit';
 import { Schematic } from '@/features/schematic/Schematic';
 import { useSettings } from '@/features/settings/settingsContext';
+import { StageRegion } from '@/shared/ui/StageLayout';
+import styles from './CircuitSimulator.module.css';
 import { Legend } from './Legend';
 import { MessagePanel } from './MessagePanel';
 import { describe } from './message';
-import styles from './SimulatorScreen.module.css';
 import { StatusBar } from './StatusBar';
 import { useDemo } from './useDemo';
 import { useSimulator } from './useSimulator';
 
-/** One circuit, live: schematic, explanation and controls. Remount it to start fresh. */
+/**
+ * One circuit, live: schematic, explanation and controls. Remount it to start fresh.
+ * Renders the summary, stage and panel regions of the surrounding StageLayout.
+ */
 export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinition }) {
   const { settings } = useSettings();
   const sim = useSimulator(circuit);
@@ -39,14 +43,14 @@ export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinit
   );
 
   return (
-    <div className={styles.simulator}>
-      <div className={styles.intro}>
+    <>
+      <StageRegion area="summary">
         <p className={styles.circuitTitle}>
           <strong>{circuit.title}</strong>
         </p>
         <Legend />
-      </div>
-      <main className={styles.drawing}>
+      </StageRegion>
+      <StageRegion area="stage">
         <Schematic
           circuit={circuit}
           positions={sim.positions}
@@ -55,8 +59,8 @@ export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinit
           highlightedDevice={sim.lastMoved}
           onToggle={onToggle}
         />
-      </main>
-      <div className={styles.panel}>
+      </StageRegion>
+      <StageRegion area="panel">
         <MessagePanel message={message} />
         <StatusBar
           lampOn={lampOn}
@@ -64,7 +68,7 @@ export function CircuitSimulator({ circuit }: { readonly circuit: CircuitDefinit
           onReset={onReset}
           onToggleDemo={() => setRunning((running) => !running)}
         />
-      </div>
-    </div>
+      </StageRegion>
+    </>
   );
 }

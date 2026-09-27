@@ -1,0 +1,45 @@
+/*
+ * One row when it fits: the lamp state wraps its own text onto two lines before the
+ * buttons move to a second row (only on narrow screens or with large text).
+ */
+.statusBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lampStatus {
+  flex: 1 1 8em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-lg);
+  padding: var(--space-1) 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--danger);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.lampStatus[data-on="true"] {
+  color: var(--ink);
+}
+
+.lampDot {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--wire-dead);
+}
+
+.lampStatus[data-on="true"] .lampDot {
+  background: var(--lamp);
+  box-shadow: 0 0 10px var(--lamp);
+}
+
+.action {
+  flex: 1 0 auto;
+}

@@ -1,6 +1,6 @@
 import { es } from '@/i18n/es';
 import { Button } from '@/shared/ui/Button';
-import styles from './SimulatorScreen.module.css';
+import styles from './StatusBar.module.css';
 
 interface StatusBarProps {
   readonly lampOn: boolean;
