@@ -5,7 +5,20 @@ function subscribe(onChange: () => void) {
   return () => window.removeEventListener('hashchange', onChange);
 }
 
-const readHash = () => decodeURIComponent(window.location.hash.slice(1));
+/**
+ * The value of a URL hash, without the '#'. Never throws: a broken link (e.g. a cut
+ * "%E0%A4%A") gives the raw text back instead of blanking the page.
+ */
+export function decodeHash(hash: string): string {
+  const raw = hash.startsWith('#') ? hash.slice(1) : hash;
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+const readHash = () => decodeHash(window.location.hash);
 
 /** The URL hash (`#combinacion-simple`) as state, so a screen can be bookmarked or shared. */
 export function useHashValue(): [string, (value: string) => void] {

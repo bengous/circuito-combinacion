@@ -54,6 +54,10 @@ export const es = {
     roles: { phase: 'Fase', neutral: 'Neutro', return: 'Retorno', bridge: 'Puentes' },
     reset: 'Volver a los valores de fábrica',
   },
+  error: {
+    message: 'Algo salió mal. Volvé a cargar la página para seguir.',
+    reload: 'Volver a cargar',
+  },
   colors: {
     rojo: 'Rojo',
     marron: 'Marrón',
