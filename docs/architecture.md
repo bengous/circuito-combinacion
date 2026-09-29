@@ -51,6 +51,22 @@ construit dans `features/simulator/message.ts`, pas dans le domaine.
 Ce modèle est générique : un nouveau type d'interrupteur (pulsador, telerruptor…) s'ajoute
 dans `devices.ts` sans toucher au solveur.
 
+## Les règles électriques
+
+`domain/validelec/` dit si un circuit marche et s'il respecte une norme (voir
+[ADR 0005](adr/0005-validelec.md)). `checkCircuit(circuit, norme)` essaie chaque combinaison
+de positions avec `solve()` et renvoie des problèmes : la règle, son sujet (appareil,
+lampe), la première position fautive, la gravité et l'article.
+
+- **Règles fonctionnelles** (`short-circuit`, `idle-control-point`) : toujours `error`, sans
+  article.
+- **Règles d'une norme** (`switch-on-neutral`, `live-lamp-when-off`) : le profil de la norme
+  (`standards.ts`, AEA 90364 ou IEC 60364) donne la gravité et l'article, ou `null` si la
+  norme n'a pas la règle.
+
+Un problème ne contient aucun texte. Les règles tournent seulement dans les tests :
+`wiring.test.ts` vérifie tout le catalogue avec chaque norme.
+
 ## Le dessin
 
 `features/schematic/` sépare deux choses :
@@ -132,7 +148,8 @@ compléter) ces primitives.
 
 Voir [ADR 0004](adr/0004-strategie-de-test.md).
 
-- **Domaine** : exhaustif (toutes les combinaisons de chaque schéma).
+- **Domaine** : exhaustif (toutes les combinaisons de chaque schéma), règles de validelec
+  comprises.
 - **Interface** : par le comportement, avec Testing Library (`app/*.test.tsx`), y compris
   la sémantique (`app/semantics.test.tsx`).
 - **Contrastes** : calculés depuis `tokens.css`.

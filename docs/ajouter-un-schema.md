@@ -27,10 +27,13 @@
    écrasé).
 
 Le dessin, le menu, la démo et les tests exhaustifs (`solve.test.ts`, `positions.test.ts`,
-`layout.test.ts`) le prennent en compte automatiquement. `layout.test.ts` vérifie aussi que
-le dessin dit la même chose que le modèle : chaque borne placée, jamais deux au même point,
-les lettres de pont du modèle (prédicats de `src/test/schematicConsistency.ts`). Pour 5
-points ou plus, vérifier à 320×568 que le sélecteur (« 5 puntos ») reste lisible.
+`layout.test.ts`, `wiring.test.ts`) le prennent en compte automatiquement. `wiring.test.ts`
+lui applique les règles de validelec avec chaque norme : ni court-circuit, ni interrupteur
+sur le neutre, ni douille sous tension lampe éteinte, ni point de commande inutile.
+`layout.test.ts` vérifie aussi que le dessin dit la même chose que le modèle : chaque borne
+placée, jamais deux au même point, les lettres de pont du modèle (prédicats de
+`src/test/schematicConsistency.ts`). Pour 5 points ou plus, vérifier à 320×568 que le
+sélecteur (« 5 puntos ») reste lisible.
 
 ## Un autre type de circuit (telerruptor, sensor…)
 
@@ -46,6 +49,7 @@ points ou plus, vérifier à 320×568 que le sélecteur (« 5 puntos ») reste l
    (`name`, `Conductor.label`) viennent du catalogue : ce sont des noms de métier, pas des
    textes d'écran.
 5. **Les tests** : au minimum, vérifier dans quelles positions la lampe s'allume ; ajouter
-   le circuit à `e2e/fixtures.ts`.
+   le circuit à `e2e/fixtures.ts`. Un appareil à plus de deux positions fait échouer
+   `demoSequence`, donc validelec : l'étendre d'abord (voir ADR 0005).
 6. **Une ADR** (`docs/adr/`) si le choix structure le projet (nouvelle géométrie, nouveau
    type de charge).
