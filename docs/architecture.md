@@ -14,7 +14,9 @@ app  ──►  features  ──►  domain
 Une flèche veut dire « peut importer ». Jamais dans l'autre sens.
 
 - **`domain/`** : le modèle électrique, en TypeScript pur. Il ne connaît ni React, ni le DOM,
-  ni les textes affichés. Biome le vérifie (`noRestrictedImports` dans `biome.json`).
+  ni les textes affichés. Biome le vérifie (`noRestrictedImports` dans `biome.json`), comme
+  l'interdiction pour `features` d'importer `app`, et pour `shared` d'importer le domaine, une
+  fonctionnalité ou les textes.
 - **`features/`** : l'interface, découpée par fonctionnalité. Une fonctionnalité peut utiliser
   les parties publiques d'une autre (par exemple `simulator` affiche le `Schematic`).
 - **`shared/`** : ce qui ne sait rien du métier : primitives d'interface (`shared/ui`),
