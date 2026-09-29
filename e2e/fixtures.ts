@@ -52,7 +52,7 @@ export const test = base.extend<Options & { consoleErrors: string[] }>({
 
 export { expect };
 
-export async function openCircuit(page: Page, id: string) {
+export async function openCircuit(page: Page, id: (typeof CIRCUITS)[number]['id']) {
   await page.goto(`./#${id}`);
   await expect(page.getByRole('group', { name: /^Esquema:/ })).toBeVisible();
 }
