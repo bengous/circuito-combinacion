@@ -90,6 +90,9 @@ export function layoutChain(circuit: CircuitDefinition): SchematicGeometry {
 
   const lampCenter = at(G.axisX, y + G.returnLength + G.lampRadius);
   const neutral = at(G.axisX, lampCenter.y + G.lampRadius + G.neutralLead);
+  if (circuit.lamps.length !== 1) {
+    throw new Error(`Layout of "${circuit.id}" draws one lamp, found ${circuit.lamps.length}`);
+  }
   for (const lamp of circuit.lamps) {
     terminals.set(lamp.input, at(G.axisX, lampCenter.y - G.lampRadius));
     terminals.set(lamp.output, at(G.axisX, lampCenter.y + G.lampRadius));

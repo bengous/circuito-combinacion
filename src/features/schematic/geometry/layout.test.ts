@@ -1,5 +1,14 @@
 import { CATALOG } from '@/domain/catalog';
+import { combinacionSimple } from '@/domain/catalog/combinacion-simple';
 import { layoutCircuit } from './layout';
+
+it('refuses a circuit with a second lamp, which the chain cannot draw', () => {
+  const twoLamps = {
+    ...combinacionSimple,
+    lamps: [...combinacionSimple.lamps, { id: 'lampara2', input: 'l2.in', output: 'l2.out' }],
+  };
+  expect(() => layoutCircuit(twoLamps)).toThrow(/draws one lamp, found 2/);
+});
 
 describe.each(CATALOG.map((c) => [c.id, c] as const))('layout of %s', (_, circuit) => {
   const geometry = layoutCircuit(circuit);
