@@ -14,6 +14,19 @@ compiler cannot check.
 
 The values reach a working electrician: a wrong threshold ships a wrong verdict.
 
+Standards are sold, not published: search the web for the text first.
+
+- Official and free: the index, prologue and corrigenda of the AEA on aea.org.ar; IEC
+  previews on standards.iteh.ai (contents and first clauses, enough to confirm a clause
+  number or title).
+- Secondary: the Schneider Electric Electrical Installation Guide
+  (electrical-installation.org), which reproduces the IEC 60364-5-52 tables; the TiSoft
+  pages on IEC 60364-5-52; cable manufacturers' datasheets (Prysmian for IRAM NM 247-3).
+- Full copies of the standards circulate on document-sharing sites. Use one only to check a
+  value, tag it "unofficial full copy", and never cite, link or commit it (ADR 0005).
+- Split the research: one subagent per standard, in parallel, each given the exact list of
+  values wanted and told never to fill a table row from memory.
+
 1. Read every threshold, table row and clause number in the standard's own text, never from
    memory. Keep for each value: clause or table, figure, URL, and a tag (official text,
    unofficial full copy, manufacturer datasheet, secondary source).
