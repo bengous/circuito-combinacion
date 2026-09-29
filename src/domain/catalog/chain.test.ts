@@ -1,4 +1,11 @@
+import { CATALOG } from '@/domain/catalog';
 import { defineChainCircuit } from './chain';
+
+describe.each(CATALOG.map((c) => [c.id, c] as const))('%s', (_, circuit) => {
+  it('counts one point of control per device', () => {
+    expect(circuit.pointsOfControl).toBe(circuit.devices.length);
+  });
+});
 
 describe('defineChainCircuit', () => {
   it('links consecutive stages with two bridges', () => {
