@@ -9,8 +9,10 @@ export const IEC: StandardProfile = {
     'min-section': { severity: 'error', clause: '60364-5-52, 524.1', minimum: 1.5 },
     'breaker-under-load': { severity: 'error', clause: '60364-4-43:2023, 431.4.2' },
     'cable-over-breaker': { severity: 'error', clause: '60364-4-43:2023, 431.4.2' },
+    'lighting-breaker-cap': null,
     // Annex G is informative and clause 525 says "should".
     'voltage-drop': { severity: 'warning', clause: '60364-5-52, G.52.1', maximum: 0.03 },
+    'sub-board-voltage-drop': null,
   },
   ampacity: {
     // 60364-5-52 Table B.52.2, PVC, two loaded conductors, method B1 (column 4), at 30 °C.

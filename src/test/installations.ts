@@ -38,3 +38,13 @@ export const longLine: Installation = {
   cables: cables({ fase: 30, 'puente-1-a': 10, 'puente-1-b': 40, retorno: 30, neutro: 30 }),
   loads: { lampara: { power: 1000, powerFactor: 1 } },
 };
+
+/** A 20 A breaker on 4 mm² cables: the cables hold, the AEA cap for lighting does not. */
+export const bigBreaker: Installation = { ...sound, breaker: 20, cables: cables(SHORT_RUNS, 4) };
+
+/** 1000 W behind a sub-board with 1 % of drop upstream; 80 m through bridge B. */
+export const subBoard: Installation = {
+  ...longLine,
+  cables: cables({ fase: 20, 'puente-1-a': 10, 'puente-1-b': 20, retorno: 20, neutro: 20 }),
+  supply: { board: 'sub', upstreamDrop: 0.01 },
+};

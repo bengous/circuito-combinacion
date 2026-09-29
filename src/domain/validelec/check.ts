@@ -1,5 +1,12 @@
 import type { CircuitDefinition } from '@/domain/circuit';
-import { breakerUnderLoad, cableOverBreaker, minSection, voltageDrop } from './dimensioning';
+import {
+  breakerUnderLoad,
+  cableOverBreaker,
+  lightingBreakerCap,
+  minSection,
+  subBoardVoltageDrop,
+  voltageDrop,
+} from './dimensioning';
 import { type Installation, validateInstallation } from './installation';
 import { STANDARDS } from './standards';
 import type { Finding, Issue, RuleSpec, StandardId, StandardProfile } from './types';
@@ -29,7 +36,9 @@ const DIMENSIONING_RULES: { readonly [K in DimensioningRuleId]: DimensioningRule
   'min-section': minSection,
   'breaker-under-load': breakerUnderLoad,
   'cable-over-breaker': cableOverBreaker,
+  'lighting-breaker-cap': lightingBreakerCap,
   'voltage-drop': voltageDrop,
+  'sub-board-voltage-drop': subBoardVoltageDrop,
 };
 
 const issuesOf = (findings: readonly Finding[], spec: RuleSpec): Issue[] =>

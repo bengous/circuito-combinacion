@@ -5,7 +5,7 @@ import {
   STANDARDS,
   type StandardId,
 } from '@/domain/validelec';
-import { cables, longLine, SHORT_RUNS, sound } from '@/test/installations';
+import { bigBreaker, cables, longLine, SHORT_RUNS, sound, subBoard } from '@/test/installations';
 
 const standards = Object.keys(STANDARDS) as StandardId[];
 const bothLit = { llave1: 1, llave2: 1 };
@@ -130,5 +130,43 @@ describe('sections and breaker', () => {
     expect(() => checkInstallation({ ...sound, ambient: 42 }, standard)).toThrow(
       /no temperature factor for 42 °C/,
     );
+  });
+});
+
+describe('lighting breaker cap and sub-board', () => {
+  it('caps a lighting breaker at 16 A under the AEA only', () => {
+    expect(judged(checkInstallation(bigBreaker, 'aea'))).toEqual([
+      {
+        finding: { rule: 'lighting-breaker-cap', breaker: 20, maximum: 16 },
+        severity: 'error',
+        clause: '771.7.6 a) I',
+      },
+    ]);
+    expect(checkInstallation(bigBreaker, 'iec')).toEqual([]);
+  });
+
+  // Through bridge B: 80 m, R = 1,2 Ω, ΔU = 5,45 V, 2,48 % after the sub-board, 3,48 % in all.
+  const total = { drop: expect.closeTo(0.034793, 6), maximum: 0.03, positions: bothLit };
+  const afterSubBoard = { drop: expect.closeTo(0.024793, 6), maximum: 0.02, positions: bothLit };
+
+  it('adds the drop upstream of a sub-board, and recommends 2 % after it, under the AEA', () => {
+    expect(judged(checkInstallation(subBoard, 'aea'))).toEqual([
+      { finding: { rule: 'voltage-drop', ...total }, severity: 'error', clause: '771.13 b)' },
+      {
+        finding: { rule: 'sub-board-voltage-drop', ...afterSubBoard },
+        severity: 'warning',
+        clause: '771.13 b), nota',
+      },
+    ]);
+  });
+
+  it('adds the drop upstream of a sub-board under the IEC, with no limit after it', () => {
+    expect(judged(checkInstallation(subBoard, 'iec'))).toEqual([
+      {
+        finding: { rule: 'voltage-drop', ...total },
+        severity: 'warning',
+        clause: '60364-5-52, G.52.1',
+      },
+    ]);
   });
 });

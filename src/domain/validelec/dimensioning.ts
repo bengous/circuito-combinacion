@@ -84,6 +84,17 @@ export function cableOverBreaker(
   });
 }
 
+/** The breaker of a lighting circuit is above the cap of the standard. */
+export function lightingBreakerCap(
+  installation: Installation,
+  spec: RuleSpec<{ readonly maximum: number }>,
+): Finding[] {
+  const { breaker } = installation;
+  return breaker > spec.maximum
+    ? [{ rule: 'lighting-breaker-cap', breaker, maximum: spec.maximum }]
+    : [];
+}
+
 /** Drop from the main board to the lamp above the maximum. */
 export function voltageDrop(
   installation: Installation,
@@ -96,5 +107,18 @@ export function voltageDrop(
   const drop = (supply.board === 'sub' ? supply.upstreamDrop : 0) + worst.drop;
   return drop > spec.maximum
     ? [{ rule: 'voltage-drop', drop, maximum: spec.maximum, positions: worst.positions }]
+    : [];
+}
+
+/** Drop from a sub-board to the lamp above the maximum. Only for a circuit on a sub-board. */
+export function subBoardVoltageDrop(
+  installation: Installation,
+  spec: RuleSpec<{ readonly maximum: number }>,
+  profile: StandardProfile,
+): Finding[] {
+  if (installation.supply.board !== 'sub') return [];
+  const worst = worstDrop(installation, profile.conductor);
+  return worst && worst.drop > spec.maximum
+    ? [{ rule: 'sub-board-voltage-drop', ...worst, maximum: spec.maximum }]
     : [];
 }
