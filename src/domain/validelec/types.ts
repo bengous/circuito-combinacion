@@ -28,8 +28,12 @@ export interface StandardProfile {
     readonly 'min-section': RuleSpec<{ readonly minimum: number }> | null;
     readonly 'breaker-under-load': RuleSpec | null;
     readonly 'cable-over-breaker': RuleSpec | null;
+    /** `maximum`: rated current of the breaker of a lighting circuit, A. */
+    readonly 'lighting-breaker-cap': RuleSpec<{ readonly maximum: number }> | null;
     /** `maximum`: drop from the main board to the lamp, as a fraction of U. */
     readonly 'voltage-drop': RuleSpec<{ readonly maximum: number }> | null;
+    /** `maximum`: drop from a sub-board to the lamp, as a fraction of U. */
+    readonly 'sub-board-voltage-drop': RuleSpec<{ readonly maximum: number }> | null;
   };
   /**
    * Current-carrying capacity of PVC copper conductors in conduit (method B1, two loaded
@@ -78,9 +82,17 @@ export type Finding =
       /** I_Z of the conductor, A. */
       readonly ampacity: number;
     }
+  | { readonly rule: 'lighting-breaker-cap'; readonly breaker: number; readonly maximum: number }
   | {
       readonly rule: 'voltage-drop';
       /** Fraction of U, in the worst position where the lamp is on. */
+      readonly drop: number;
+      readonly maximum: number;
+      readonly positions: Positions;
+    }
+  | {
+      readonly rule: 'sub-board-voltage-drop';
+      /** Fraction of U from the sub-board, in the worst position where the lamp is on. */
       readonly drop: number;
       readonly maximum: number;
       readonly positions: Positions;

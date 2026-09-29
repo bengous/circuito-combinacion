@@ -10,7 +10,10 @@ export const AEA: StandardProfile = {
     'min-section': { severity: 'error', clause: '771.13, Tabla 771.13.I', minimum: 1.5 },
     'breaker-under-load': { severity: 'error', clause: '771.19.2.1' },
     'cable-over-breaker': { severity: 'error', clause: '771.19.2.1' },
+    'lighting-breaker-cap': { severity: 'error', clause: '771.7.6 a) I', maximum: 16 },
     'voltage-drop': { severity: 'error', clause: '771.13 b)', maximum: 0.03 },
+    // The note says "se recomienda" 1 % upstream, hence 2 % from the sub-board.
+    'sub-board-voltage-drop': { severity: 'warning', clause: '771.13 b), nota', maximum: 0.02 },
   },
   ampacity: {
     // Tabla 771.16.I, column 2x (two loaded conductors + PE), at 40 °C.
