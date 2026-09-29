@@ -24,6 +24,15 @@ export interface StandardProfile {
   readonly rules: {
     readonly 'switch-on-neutral': RuleSpec | null;
     readonly 'live-lamp-when-off': RuleSpec | null;
+    /** `maximum`: drop from the main board to the lamp, as a fraction of U. */
+    readonly 'voltage-drop': RuleSpec<{ readonly maximum: number }> | null;
+  };
+  /** Conductor constants for the voltage drop, at service temperature. */
+  readonly conductor: {
+    /** Ω·mm²/m. */
+    readonly resistivity: number;
+    /** Ω/m. */
+    readonly reactance: number;
   };
 }
 
@@ -36,7 +45,14 @@ export type Finding =
     }
   | { readonly rule: 'switch-on-neutral'; readonly device: string; readonly positions: Positions }
   | { readonly rule: 'live-lamp-when-off'; readonly lamp: string; readonly positions: Positions }
-  | { readonly rule: 'idle-control-point'; readonly device: string; readonly positions: Positions };
+  | { readonly rule: 'idle-control-point'; readonly device: string; readonly positions: Positions }
+  | {
+      readonly rule: 'voltage-drop';
+      /** Fraction of U, in the worst position where the lamp is on. */
+      readonly drop: number;
+      readonly maximum: number;
+      readonly positions: Positions;
+    };
 
 export interface Issue {
   readonly finding: Finding;
