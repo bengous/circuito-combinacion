@@ -23,6 +23,7 @@ export function ConductorLines({ circuit, geometry, state, showTension }: Conduc
             key={conductor.id}
             points={[pointOf(geometry, conductor.from), pointOf(geometry, conductor.to)]}
             look={conductorStyle(conductor.role, status, showTension)}
+            dataConductor={conductor.id}
           />
         );
       })}
