@@ -52,18 +52,25 @@ const cutNeutral: CircuitDefinition = {
   ],
 };
 
-const functional = (finding: Finding): Issue => ({ finding, severity: 'error', clause: null });
+const functional = (finding: Finding): Issue => ({
+  finding,
+  severity: 'error',
+  clause: null,
+  elsewhere: [],
+});
 
 describe.each(standards)('checkCircuit with the %s standard', (standard) => {
   const onNeutral = (device: string): Issue => ({
     finding: { rule: 'switch-on-neutral', device, positions: rest },
     severity: 'error',
     clause: CLAUSES[standard].neutral,
+    elsewhere: [],
   });
   const liveLamp: Issue = {
     finding: { rule: 'live-lamp-when-off', lamp: 'lampara', positions: firstOff },
     severity: 'error',
     clause: CLAUSES[standard].lamp,
+    elsewhere: [],
   };
 
   it.each(CATALOG.map((c) => [c.id, c] as const))('finds nothing wrong in %s', (_, circuit) => {

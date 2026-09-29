@@ -6,14 +6,18 @@ import type { Positions, TerminalId } from '@/domain/circuit';
 
 export type StandardId = 'aea' | 'iec';
 
-export type Severity = 'error' | 'warning';
+/** What a standard says of a rule it sets. */
+export type RuleSeverity = 'error' | 'warning';
+
+/** `info`: the chosen standard has nothing to say, another standard does. */
+export type Severity = RuleSeverity | 'info';
 
 /**
  * What one standard says about one rule. `Limit` carries the rule's threshold when it has one,
  * e.g. `{ minimum: number }`.
  */
 export type RuleSpec<Limit extends object = object> = {
-  readonly severity: Severity;
+  readonly severity: RuleSeverity;
   /** Clause as printed in the standard, e.g. "90364-6-61, 613.8". */
   readonly clause: string;
 } & Limit;
@@ -98,9 +102,20 @@ export type Finding =
       readonly positions: Positions;
     };
 
+/** How another standard judges the same rule on the same subject. */
+export interface Verdict {
+  readonly standard: StandardId;
+  /** Null: that standard does not flag it, having no such rule or finding the value within limits. */
+  readonly severity: RuleSeverity | null;
+  /** Clause of that standard for the rule; null when it has no such rule. */
+  readonly clause: string | null;
+}
+
 export interface Issue {
   readonly finding: Finding;
   readonly severity: Severity;
-  /** Clause of the chosen standard. Null for a functional rule (short circuit, idle point). */
+  /** Clause of the chosen standard. Null for a functional rule, and for an `info` issue. */
   readonly clause: string | null;
+  /** The other standards that judge this differently. Empty when they all agree. */
+  readonly elsewhere: readonly Verdict[];
 }

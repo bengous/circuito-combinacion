@@ -12,7 +12,9 @@ const bothLit = { llave1: 1, llave2: 1 };
 
 /** What the chosen standard says, without the comparison with the other standards. */
 const judged = (issues: readonly Issue[]) =>
-  issues.map(({ finding, severity, clause }) => ({ finding, severity, clause }));
+  issues
+    .filter((issue) => issue.severity !== 'info')
+    .map(({ finding, severity, clause }) => ({ finding, severity, clause }));
 
 describe.each(standards)('checkInstallation with the %s standard', (standard) => {
   it('finds nothing wrong with short 1,5 mm² cables behind a 10 A breaker', () => {
@@ -142,7 +144,7 @@ describe('lighting breaker cap and sub-board', () => {
         clause: '771.7.6 a) I',
       },
     ]);
-    expect(checkInstallation(bigBreaker, 'iec')).toEqual([]);
+    expect(judged(checkInstallation(bigBreaker, 'iec'))).toEqual([]);
   });
 
   // Through bridge B: 80 m, R = 1,2 Ω, ΔU = 5,45 V, 2,48 % after the sub-board, 3,48 % in all.

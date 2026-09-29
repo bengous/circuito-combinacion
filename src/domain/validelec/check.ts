@@ -1,4 +1,5 @@
 import type { CircuitDefinition } from '@/domain/circuit';
+import { covers } from './ampacity';
 import {
   breakerUnderLoad,
   cableOverBreaker,
@@ -10,6 +11,7 @@ import {
 import { type Installation, validateInstallation } from './installation';
 import { STANDARDS } from './standards';
 import type { Finding, Issue, RuleSpec, StandardId, StandardProfile } from './types';
+import { compareStandards, type Judgment } from './verdicts';
 import { idleControlPoint, liveLampWhenOff, shortCircuit, switchOnNeutral } from './wiring';
 
 type Rules = StandardProfile['rules'];
@@ -41,38 +43,57 @@ const DIMENSIONING_RULES: { readonly [K in DimensioningRuleId]: DimensioningRule
   'sub-board-voltage-drop': subBoardVoltageDrop,
 };
 
-const issuesOf = (findings: readonly Finding[], spec: RuleSpec): Issue[] =>
+const STANDARD_IDS = Object.keys(STANDARDS) as StandardId[];
+
+const judge = (findings: readonly Finding[], spec: RuleSpec): Judgment[] =>
   findings.map((finding) => ({ finding, severity: spec.severity, clause: spec.clause }));
 
 function runDimensioning<K extends DimensioningRuleId>(
   id: K,
   installation: Installation,
   profile: StandardProfile,
-): Issue[] {
+): Judgment[] {
   const spec = profile.rules[id];
   if (!spec) return [];
-  return issuesOf(DIMENSIONING_RULES[id](installation, spec, profile), spec);
+  return judge(DIMENSIONING_RULES[id](installation, spec, profile), spec);
 }
 
-/** Every issue of the circuit under the chosen standard. Each rule runs, whatever the others find. */
-export function checkCircuit(circuit: CircuitDefinition, standard: StandardId): Issue[] {
+/** Every rule on the wiring, under one standard. Each rule runs, whatever the others find. */
+function judgeCircuit(circuit: CircuitDefinition, profile: StandardProfile): Judgment[] {
   const functional = FUNCTIONAL_RULES.flatMap((rule) => rule(circuit)).map(
-    (finding): Issue => ({ finding, severity: 'error', clause: null }),
+    (finding): Judgment => ({ finding, severity: 'error', clause: null }),
   );
-  const { rules } = STANDARDS[standard];
   const wiring = (Object.keys(WIRING_RULES) as WiringRuleId[]).flatMap((id) => {
-    const spec = rules[id];
-    return spec ? issuesOf(WIRING_RULES[id](circuit), spec) : [];
+    const spec = profile.rules[id];
+    return spec ? judge(WIRING_RULES[id](circuit), spec) : [];
   });
   return [...functional, ...wiring];
 }
 
-/** Every issue of the installation: its wiring, then its sizing under the chosen standard. */
-export function checkInstallation(installation: Installation, standard: StandardId): Issue[] {
-  validateInstallation(installation);
-  const profile = STANDARDS[standard];
+function judgeInstallation(installation: Installation, profile: StandardProfile): Judgment[] {
   const sizing = (Object.keys(DIMENSIONING_RULES) as DimensioningRuleId[]).flatMap((id) =>
     runDimensioning(id, installation, profile),
   );
-  return [...checkCircuit(installation.circuit, standard), ...sizing];
+  return [...judgeCircuit(installation.circuit, profile), ...sizing];
+}
+
+/** Every issue of the circuit's wiring under the chosen standard. */
+export function checkCircuit(circuit: CircuitDefinition, standard: StandardId): Issue[] {
+  const others = STANDARD_IDS.filter((id) => id !== standard).map(
+    (id) => [id, judgeCircuit(circuit, STANDARDS[id])] as const,
+  );
+  return compareStandards(judgeCircuit(circuit, STANDARDS[standard]), others);
+}
+
+/**
+ * Every issue of the installation, wiring then sizing, under the chosen standard. Another
+ * standard is compared only when its tables cover the installation; the chosen one throws.
+ */
+export function checkInstallation(installation: Installation, standard: StandardId): Issue[] {
+  validateInstallation(installation);
+  const own = judgeInstallation(installation, STANDARDS[standard]);
+  const others = STANDARD_IDS.filter(
+    (id) => id !== standard && covers(STANDARDS[id], installation),
+  ).map((id) => [id, judgeInstallation(installation, STANDARDS[id])] as const);
+  return compareStandards(own, others);
 }
