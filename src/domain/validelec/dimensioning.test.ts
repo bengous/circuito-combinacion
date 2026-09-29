@@ -1,5 +1,11 @@
-import { checkInstallation, type Issue, STANDARDS, type StandardId } from '@/domain/validelec';
-import { longLine, sound } from '@/test/installations';
+import {
+  checkInstallation,
+  type Installation,
+  type Issue,
+  STANDARDS,
+  type StandardId,
+} from '@/domain/validelec';
+import { cables, longLine, SHORT_RUNS, sound } from '@/test/installations';
 
 const standards = Object.keys(STANDARDS) as StandardId[];
 const bothLit = { llave1: 1, llave2: 1 };
@@ -44,5 +50,85 @@ describe('voltage drop', () => {
     expect(issues.map((issue) => issue.finding)).toEqual([
       { rule: 'voltage-drop', drop: expect.closeTo(0.04045, 5), maximum: 0.03, positions: bothLit },
     ]);
+  });
+});
+
+describe('sections and breaker', () => {
+  const minSection = { aea: '771.13, Tabla 771.13.I', iec: '60364-5-52, 524.1' } as const;
+  const coordination = { aea: '771.19.2.1', iec: '60364-4-43:2023, 431.4.2' } as const;
+
+  it.each(standards)('reports a 1 mm² bridge under %s, and nothing else', (standard) => {
+    const thin = { ...sound.cables, 'puente-1-b': { section: 1, length: 4 } };
+    expect(judged(checkInstallation({ ...sound, cables: thin }, standard))).toEqual([
+      {
+        finding: { rule: 'min-section', conductor: 'puente-1-b', section: 1, minimum: 1.5 },
+        severity: 'error',
+        clause: minSection[standard],
+      },
+    ]);
+  });
+
+  it.each([
+    ['aea', 15],
+    ['iec', 15.225],
+  ] as const)('reports a 1,5 mm² return behind 16 A at 40 °C under %s', (standard, ampacity) => {
+    // AEA: 15 A at 40 °C. IEC: 17,5 A at 30 °C × 0,87. The 2,5 mm² cables carry 21 and 20,88 A.
+    const weakReturn: Installation = {
+      ...sound,
+      ambient: 40,
+      breaker: 16,
+      cables: { ...cables(SHORT_RUNS, 2.5), retorno: { section: 1.5, length: 3 } },
+    };
+    expect(judged(checkInstallation(weakReturn, standard))).toEqual([
+      {
+        finding: {
+          rule: 'cable-over-breaker',
+          conductor: 'retorno',
+          breaker: 16,
+          ampacity: expect.closeTo(ampacity, 6),
+        },
+        severity: 'error',
+        clause: coordination[standard],
+      },
+    ]);
+  });
+
+  it.each(standards)('reports a 2000 W lamp behind a 6 A breaker under %s', (standard) => {
+    const strong = { ...sound, breaker: 6, loads: { lampara: { power: 2000, powerFactor: 1 } } };
+    expect(judged(checkInstallation(strong, standard))).toEqual([
+      {
+        finding: {
+          rule: 'breaker-under-load',
+          designCurrent: expect.closeTo(9.0909, 4),
+          breaker: 6,
+        },
+        severity: 'error',
+        clause: coordination[standard],
+      },
+    ]);
+  });
+
+  it('applies the IEC grouping factor to every cable of a conduit with 4 circuits', () => {
+    const crowded = { ...sound, breaker: 13, circuitsInConduit: 4 };
+    expect(checkInstallation(crowded, 'iec').map((issue) => issue.finding)).toEqual(
+      sound.circuit.conductors.map((conductor) => ({
+        rule: 'cable-over-breaker',
+        conductor: conductor.id,
+        breaker: 13,
+        ampacity: expect.closeTo(11.375, 6),
+      })),
+    );
+  });
+
+  it('has no AEA grouping factor for 4 circuits in one conduit', () => {
+    expect(() => checkInstallation({ ...sound, circuitsInConduit: 4 }, 'aea')).toThrow(
+      'AEA: no grouping factor for 4 circuits in one conduit',
+    );
+  });
+
+  it.each(standards)('has no %s temperature factor for 42 °C', (standard) => {
+    expect(() => checkInstallation({ ...sound, ambient: 42 }, standard)).toThrow(
+      /no temperature factor for 42 °C/,
+    );
   });
 });

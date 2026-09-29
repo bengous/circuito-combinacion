@@ -1,10 +1,11 @@
 import type { Positions } from '@/domain/circuit';
 import { demoSequence, solve } from '@/domain/circuit';
+import { ampacityBySection } from './ampacity';
 import { cableOf, type Installation, lampOf } from './installation';
 import type { Finding, RuleSpec, StandardProfile } from './types';
 
 /** Design current I_B = P / (U · cos φ), in A. */
-function designCurrent(installation: Installation): number {
+function designCurrentOf(installation: Installation): number {
   const { load } = lampOf(installation);
   return load.power / (installation.voltage * load.powerFactor);
 }
@@ -22,7 +23,7 @@ function worstDrop(
   const { lamp, load } = lampOf(installation);
   const cos = load.powerFactor;
   const sin = Math.sqrt(1 - cos ** 2);
-  const current = designCurrent(installation);
+  const current = designCurrentOf(installation);
   let worst: { drop: number; positions: Positions } | null = null;
   for (const positions of demoSequence(circuit)) {
     const state = solve(circuit, positions);
@@ -39,6 +40,48 @@ function worstDrop(
     if (!worst || drop > worst.drop) worst = { drop, positions };
   }
   return worst;
+}
+
+/** A conductor thinner than the minimum section. */
+export function minSection(
+  installation: Installation,
+  spec: RuleSpec<{ readonly minimum: number }>,
+): Finding[] {
+  return installation.circuit.conductors.flatMap((conductor) => {
+    const { section } = cableOf(installation, conductor.id);
+    return section < spec.minimum
+      ? [{ rule: 'min-section' as const, conductor: conductor.id, section, minimum: spec.minimum }]
+      : [];
+  });
+}
+
+/** The breaker trips under the normal load: I_B > I_n. */
+export function breakerUnderLoad(installation: Installation): Finding[] {
+  const designCurrent = designCurrentOf(installation);
+  const { breaker } = installation;
+  return designCurrent > breaker ? [{ rule: 'breaker-under-load', designCurrent, breaker }] : [];
+}
+
+/**
+ * The breaker lets through more than the conductor can carry: I_n > I_Z. A conductor under the
+ * minimum section is left out: it has its own finding, and the tables give no I_Z for it.
+ */
+export function cableOverBreaker(
+  installation: Installation,
+  _spec: RuleSpec,
+  profile: StandardProfile,
+): Finding[] {
+  const minimum = profile.rules['min-section']?.minimum ?? 0;
+  const ampacityOf = ampacityBySection(installation, profile);
+  const { breaker } = installation;
+  return installation.circuit.conductors.flatMap((conductor) => {
+    const { section } = cableOf(installation, conductor.id);
+    if (section < minimum) return [];
+    const ampacity = ampacityOf(section);
+    return breaker > ampacity
+      ? [{ rule: 'cable-over-breaker' as const, conductor: conductor.id, breaker, ampacity }]
+      : [];
+  });
 }
 
 /** Drop from the main board to the lamp above the maximum. */
