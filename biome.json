@@ -69,8 +69,48 @@
                 },
                 "patterns": [
                   {
-                    "group": ["@/features/*", "@/app/*", "@/shared/*", "@/i18n/*"],
+                    "group": ["@/features/**", "@/app/**", "@/shared/**", "@/i18n/**"],
                     "message": "The domain must not depend on the UI layers."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/features/**", "!src/features/**/*.test.*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/app/**"],
+                    "message": "A feature must not depend on the app layer."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/shared/**", "!src/shared/**/*.test.*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/**", "@/app/**", "@/domain/**", "@/i18n/**"],
+                    "message": "Shared code must not know the domain, the features or the texts."
                   }
                 ]
               }

@@ -1,11 +1,11 @@
 import type { Page } from '@playwright/test';
+import { MIN_SCALE } from '../src/features/schematic/scale';
+import { TEXT_SCALE } from '../src/features/settings/settings';
 
-/** Mirrors MIN_SCALE in src/features/schematic/Schematic.tsx. */
-const MIN_SCALE = 0.85;
-/** Mirrors TEXT_SCALE in src/features/settings/settings.ts. */
-export const TEXT_SCALE = { normal: 1, large: 1.15, huge: 1.3 } as const;
 /** Smallest comfortable tap target (Apple HIG, WCAG 2.5.5). */
 export const TAP_MIN = 44;
+
+export { TEXT_SCALE };
 
 export interface DrawingSize {
   /** Height of the drawing box, minus what a scrolling ancestor cuts off. */

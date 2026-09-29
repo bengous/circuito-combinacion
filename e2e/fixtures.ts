@@ -1,10 +1,11 @@
 import { test as base, expect, type Page } from '@playwright/test';
+import type { TextSize } from '../src/features/settings/settings';
+import type { Theme } from '../src/features/settings/theme';
 
 /** Mirrors src/features/settings/persistence.ts. */
 const SETTINGS_KEY = 'circuito.settings.v1';
 
-export type TextSize = 'normal' | 'large' | 'huge';
-export type Theme = 'night' | 'day';
+export type { TextSize, Theme };
 
 export const CIRCUITS = [
   { id: 'combinacion-simple', points: 2, title: 'Combinación simple' },
@@ -51,7 +52,7 @@ export const test = base.extend<Options & { consoleErrors: string[] }>({
 
 export { expect };
 
-export async function openCircuit(page: Page, id: string) {
+export async function openCircuit(page: Page, id: (typeof CIRCUITS)[number]['id']) {
   await page.goto(`./#${id}`);
   await expect(page.getByRole('group', { name: /^Esquema:/ })).toBeVisible();
 }

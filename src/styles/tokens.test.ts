@@ -30,6 +30,9 @@ describe.each(THEMES)('%s theme tokens', (theme) => {
     ['--accent', '--device-body'],
     ['--lamp-ring', '--device-body'],
     ['--lamp-ring', '--bg'],
+    ['--control-border', '--bg'],
+    ['--control-border', '--panel'],
+    ['--lamp-filament', '--lamp-core'],
   ])('graphic %s on %s is visible', (graphic, background) => {
     expect(ratio(graphic, background)).toBeGreaterThanOrEqual(GRAPHICS);
   });

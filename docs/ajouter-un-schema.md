@@ -40,7 +40,9 @@ Le dessin, le menu, la démo et les tests exhaustifs (`solve.test.ts`, `position
 3. **Le dessin** : si la chaîne verticale ne convient pas, ajouter un type de `CircuitLayout`
    et sa stratégie dans `features/schematic/geometry/`, puis le symbole de l'appareil dans
    `features/schematic/parts/` et son aiguillage dans `DeviceSymbol.tsx`.
-4. **Les textes** dans `src/i18n/es.ts`.
+4. **Les textes d'interface** dans `src/i18n/es.ts`. Les noms d'appareils et de câbles
+   (`name`, `Conductor.label`) viennent du catalogue : ce sont des noms de métier, pas des
+   textes d'écran.
 5. **Les tests** : au minimum, vérifier dans quelles positions la lampe s'allume ; ajouter
    le circuit à `e2e/fixtures.ts`.
 6. **Une ADR** (`docs/adr/`) si le choix structure le projet (nouvelle géométrie, nouveau

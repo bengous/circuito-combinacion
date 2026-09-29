@@ -28,7 +28,7 @@ export function describe(
     case 'closed':
       return { moved, explanation: es.message.closed, warning: null };
     case 'open': {
-      const via = diagnosis.liveConductor?.label ?? `borne ${diagnosis.arrivesAt.toUpperCase()}`;
+      const via = diagnosis.liveConductor?.label ?? es.message.terminal(diagnosis.arrivesAt);
       return {
         moved,
         explanation: es.message.open(diagnosis.device.name, via, diagnosis.setTo),

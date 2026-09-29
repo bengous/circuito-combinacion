@@ -14,13 +14,20 @@ app  ──►  features  ──►  domain
 Une flèche veut dire « peut importer ». Jamais dans l'autre sens.
 
 - **`domain/`** : le modèle électrique, en TypeScript pur. Il ne connaît ni React, ni le DOM,
-  ni les textes affichés. Biome le vérifie (`noRestrictedImports` dans `biome.json`).
+  ni les composants. Il ne contient aucun texte d'interface : les noms de câbles
+  (`Conductor.label`, par exemple `puente A`) sont du vocabulaire du métier, écrit dans la
+  seule langue de l'app, et affichés tels quels. Biome le vérifie (`noRestrictedImports` dans
+  `biome.json`), comme l'interdiction pour `features` d'importer `app`, et pour `shared`
+  d'importer le domaine, une fonctionnalité ou les textes.
 - **`features/`** : l'interface, découpée par fonctionnalité. Une fonctionnalité peut utiliser
   les parties publiques d'une autre (par exemple `simulator` affiche le `Schematic`).
 - **`shared/`** : ce qui ne sait rien du métier : primitives d'interface (`shared/ui`),
   stockage local, hooks génériques.
-- **`i18n/`** : tous les textes. Aucun texte en dur dans les composants.
+- **`i18n/`** : tous les textes d'interface. Aucun texte en dur dans les composants.
 - **`app/`** : l'assemblage (`App.tsx`) et le filet de sécurité (`ErrorBoundary`).
+- **`test/`** : les aides hors couches (`setup.ts`, `contrast.ts`, `themeTokens.ts`), lues
+  par les tests unitaires et par les tests de jetons. Elles ne font pas partie de la
+  hiérarchie `app → features → domain`.
 
 ## Le modèle électrique
 
@@ -91,6 +98,7 @@ affichées, stable pendant le défilement), avec `100vh` pour les navigateurs pl
 | `SegmentedControl` | Choix exclusif (groupe nommé de boutons `aria-pressed`)             |
 | `Dialog`           | Fenêtre modale sur `<dialog>` : titre, corps qui défile, pied       |
 | `VisuallyHidden`   | Texte pour lecteurs d'écran seulement                               |
+| `icons.tsx`        | Petits traits SVG dans la couleur de texte courante                 |
 
 Avant d'écrire du CSS pour un bouton, une fenêtre ou une mise en page, utiliser (ou
 compléter) ces primitives.
