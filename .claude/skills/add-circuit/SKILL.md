@@ -15,7 +15,8 @@ The full reference is `docs/ajouter-un-schema.md` (French). Steps:
 2. Add it to `CATALOG` in `src/domain/catalog/index.ts` (menu order = points of control).
 3. Add `{ id, points, title }` to `CIRCUITS` in `e2e/fixtures.ts`.
 4. Run `npm run check`. The exhaustive tests (`solve.test.ts`, `positions.test.ts`,
-   `layout.test.ts`) pick the circuit up by themselves: read their output, don't assume.
+   `layout.test.ts`, and `wiring.test.ts` for the validelec rules under each standard) pick
+   the circuit up by themselves: read their output, don't assume.
 5. Run `npm run test:e2e` (see the `verify-mobile` skill). A taller circuit makes the page
    scroll; the drawing must never be below its floor.
 
@@ -24,6 +25,8 @@ The full reference is `docs/ajouter-un-schema.md` (French). Steps:
 1. `DeviceKind` in `src/domain/circuit/types.ts`; its terminals, number of positions and
    contacts per position in `DEVICE_KINDS` (`src/domain/circuit/devices.ts`). Do not touch
    the solver.
+   A device with more than two positions makes `demoSequence`, and so validelec, throw:
+   extend it first (ADR 0005).
 2. Build the circuit: a `CircuitDefinition`, or a small builder like `chain.ts`.
 3. Drawing: a symbol in `src/features/schematic/parts/`, dispatched in `DeviceSymbol.tsx`;
    state text in `deviceText.ts`. A different shape of schematic needs a new

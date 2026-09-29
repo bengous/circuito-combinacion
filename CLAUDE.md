@@ -29,6 +29,7 @@ A server already on that port is reused, so make sure it serves a fresh build.
 | What                                   | Where                                                   |
 | -------------------------------------- | ------------------------------------------------------- |
 | Electrical model (plain TS, no React)  | `src/domain/circuit/`, circuits in `src/domain/catalog/` |
+| Electrical rules (AEA, IEC)            | `src/domain/validelec/`, profiles in `standards.ts`     |
 | Drawing: geometry (pure) / SVG parts   | `src/features/schematic/geometry/`, `.../parts/`        |
 | Main screen, demo, messages            | `src/features/simulator/`                               |
 | Settings, themes, cable palette        | `src/features/settings/`                                |
