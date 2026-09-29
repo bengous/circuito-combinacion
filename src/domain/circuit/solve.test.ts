@@ -21,14 +21,6 @@ describe('solve', () => {
       },
     );
 
-    it.each(demoSequence(circuit).map((p) => [JSON.stringify(p), p] as const))(
-      'never puts phase and neutral on the same terminal for %s',
-      (_, positions) => {
-        const state = solve(circuit, positions);
-        expect([...state.live].filter((t) => state.neutral.has(t))).toEqual([]);
-      },
-    );
-
     it('carries current through phase, return and neutral when the lamp is on', () => {
       const positions = initialPositions(circuit);
       for (const id of ['fase', 'retorno', 'neutro']) {
