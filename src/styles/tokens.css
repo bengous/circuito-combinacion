@@ -47,6 +47,7 @@
   --ink: #e3ecf5;
   --muted: #93a9c1;
   --line: #23426a;
+  --control-border: #4573ad;
   --device-body: #13294a;
   --device-stroke: #3e6c98;
   --terminal: #7f97b0;
@@ -58,7 +59,7 @@
   --lamp: #ffd54f;
   --lamp-ring: #ffd54f;
   --lamp-core: #fff6d6;
-  --lamp-filament: #e07b00;
+  --lamp-filament: #d97400;
   --danger: #ff7a7a;
 }
 
@@ -69,6 +70,7 @@
   --ink: #0e1a26;
   --muted: #465666;
   --line: #cbd5df;
+  --control-border: #7d8d9e;
   --device-body: #eaf0f6;
   --device-stroke: #5e7489;
   --terminal: #7a8b9c;
