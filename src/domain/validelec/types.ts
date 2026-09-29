@@ -8,8 +8,23 @@ export type StandardId = 'aea' | 'iec';
 
 export type Severity = 'error' | 'warning';
 
+/**
+ * What one standard says about one rule. `Limit` carries the rule's threshold when it has one,
+ * e.g. `{ minimum: number }`.
+ */
+export type RuleSpec<Limit extends object = object> = {
+  readonly severity: Severity;
+  /** Clause as printed in the standard, e.g. "90364-6-61, 613.8". */
+  readonly clause: string;
+} & Limit;
+
 export interface StandardProfile {
   readonly id: StandardId;
+  /** Keyed by the `rule` of a finding. Null when the standard has no such rule. */
+  readonly rules: {
+    readonly 'switch-on-neutral': RuleSpec | null;
+    readonly 'live-lamp-when-off': RuleSpec | null;
+  };
 }
 
 export type Finding =
@@ -19,6 +34,8 @@ export type Finding =
       /** Terminals at phase and neutral potential at once. */
       readonly terminals: readonly TerminalId[];
     }
+  | { readonly rule: 'switch-on-neutral'; readonly device: string; readonly positions: Positions }
+  | { readonly rule: 'live-lamp-when-off'; readonly lamp: string; readonly positions: Positions }
   | { readonly rule: 'idle-control-point'; readonly device: string; readonly positions: Positions };
 
 export interface Issue {
