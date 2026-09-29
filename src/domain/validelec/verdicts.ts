@@ -16,13 +16,28 @@ export interface Judgment {
   readonly clause: string | null;
 }
 
-/** The rule and what it is about: two standards judge the same thing when this matches. */
-function keyOf(finding: Finding): string {
-  if ('conductor' in finding) return `${finding.rule}:${finding.conductor}`;
-  if ('device' in finding) return `${finding.rule}:${finding.device}`;
-  if ('lamp' in finding) return `${finding.rule}:${finding.lamp}`;
-  return finding.rule;
+/** What a finding is about. Exhaustive: a new rule does not compile until it names its subject. */
+function subjectOf(finding: Finding): string {
+  switch (finding.rule) {
+    case 'switch-on-neutral':
+    case 'idle-control-point':
+      return finding.device;
+    case 'live-lamp-when-off':
+      return finding.lamp;
+    case 'min-section':
+    case 'cable-over-breaker':
+      return finding.conductor;
+    case 'short-circuit':
+    case 'breaker-under-load':
+    case 'lighting-breaker-cap':
+    case 'voltage-drop':
+    case 'sub-board-voltage-drop':
+      return 'circuit';
+  }
 }
+
+/** Two standards judge the same thing when rule and subject match. */
+const keyOf = (finding: Finding) => `${finding.rule}:${subjectOf(finding)}`;
 
 function clauseOf(profile: StandardProfile, rule: Finding['rule']): string | null {
   const specs: Partial<Record<Finding['rule'], RuleSpec | null>> = profile.rules;
