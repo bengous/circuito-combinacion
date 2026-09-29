@@ -21,7 +21,8 @@ Chaque correction ajoutait une media query de plus.
   pas dans chaque écran :
   - portrait : une colonne (toolbar, summary, stage, panel) ;
   - paysage téléphone et ≥ 900 px : stage à gauche, colonne latérale en `rem` à droite ;
-  - grand texte : la colonne latérale s'élargit (rem) dans la limite de 50 %.
+  - grand texte : la colonne latérale s'élargit (rem) dans la limite de 50 % de la largeur,
+    et de 24 rem au-delà (`clamp(16rem, 50%, 24rem)`).
 - `--viewport-height` = `100svh` (repli `100vh`) : stable quand Safari masque ses barres.
 
 ## Conséquences
