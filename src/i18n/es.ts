@@ -23,6 +23,7 @@ export const es = {
     open: (device: string, via: string, setTo: string) =>
       `La fase llega a la ${device} por el ${via}, pero la llave está en ${setTo.toUpperCase()}. Circuito abierto.`,
     stillLive: (via: string) => `Ojo: el ${via} sigue con tensión.`,
+    terminal: (side: string) => `terminal ${side.toUpperCase()}`,
     openUnknown: 'Circuito abierto.',
     hint: 'Tocá una llave para cambiarla.',
   },
