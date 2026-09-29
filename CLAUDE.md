@@ -54,6 +54,8 @@ Rules (tooling enforces most of them):
 ## Recipes
 
 - **Add a circuit**: follow `docs/ajouter-un-schema.md` (skill: `add-circuit`).
+- **Add a standard or an electrical rule** (validelec): skill `add-rule`. Every value is
+  read in the standard's text first; ADR 0005 and 0006 say why the module works this way.
 - **Add a feature**: a folder in `src/features/<name>/` with its components, hooks, CSS
   Modules and tests. Pure logic goes in a plain `.ts` file (tested without React) or in the
   domain if it is electrical. Use `shared/ui` primitives; put new strings in `es.ts`.
