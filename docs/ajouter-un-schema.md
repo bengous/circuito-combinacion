@@ -27,8 +27,10 @@
    écrasé).
 
 Le dessin, le menu, la démo et les tests exhaustifs (`solve.test.ts`, `positions.test.ts`,
-`layout.test.ts`) le prennent en compte automatiquement. Pour 5 points ou plus, vérifier
-à 320×568 que le sélecteur (« 5 puntos ») reste lisible.
+`layout.test.ts`) le prennent en compte automatiquement. `layout.test.ts` vérifie aussi que
+le dessin dit la même chose que le modèle : chaque borne placée, jamais deux au même point,
+les lettres de pont du modèle (prédicats de `src/test/schematicConsistency.ts`). Pour 5
+points ou plus, vérifier à 320×568 que le sélecteur (« 5 puntos ») reste lisible.
 
 ## Un autre type de circuit (telerruptor, sensor…)
 
