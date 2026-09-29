@@ -1,5 +1,10 @@
 import { CATALOG } from '@/domain/catalog';
 import { combinacionSimple } from '@/domain/catalog/combinacion-simple';
+import {
+  bridgeLetterMismatches,
+  collidingTerminals,
+  unplacedTerminals,
+} from '@/test/schematicConsistency';
 import { layoutCircuit } from './layout';
 
 it('refuses a circuit with a second lamp, which the chain cannot draw', () => {
@@ -31,5 +36,17 @@ describe.each(CATALOG.map((c) => [c.id, c] as const))('layout of %s', (_, circui
 
   it('gives every device a body and a label', () => {
     expect([...geometry.devices.keys()]).toEqual(circuit.devices.map((d) => d.id));
+  });
+
+  it('places every terminal of the model', () => {
+    expect(unplacedTerminals(circuit, geometry)).toEqual([]);
+  });
+
+  it('never draws two terminals on the same point', () => {
+    expect(collidingTerminals(geometry)).toEqual([]);
+  });
+
+  it('writes the bridge letters the model names', () => {
+    expect(bridgeLetterMismatches(circuit, geometry)).toEqual([]);
   });
 });
