@@ -33,3 +33,17 @@ export function ampacityBySection(
     );
   return (section) => lookup(profile, base, section, `ampacity for ${section} mm²`) * factor;
 }
+
+/**
+ * Whether the tables of the standard give an I_Z for this installation: its ambient, its
+ * conduit and every conductor at or above the minimum section.
+ */
+export function covers(profile: StandardProfile, installation: Installation): boolean {
+  const { base, temperature, grouping } = profile.ampacity;
+  const minimum = profile.rules['min-section']?.minimum ?? 0;
+  return (
+    installation.ambient in temperature &&
+    installation.circuitsInConduit in grouping &&
+    Object.values(installation.cables).every(({ section }) => section < minimum || section in base)
+  );
+}
