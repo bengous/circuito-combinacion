@@ -31,6 +31,9 @@
 
   /* Idle cables are drawn a little faded; the colours above stay >= 3:1 even so. */
   --wire-faded-opacity: 0.9;
+
+  --scrim: rgb(0 0 0 / 0.55);
+  --swatch-ring: rgb(0 0 0 / 0.15);
 }
 
 @supports (height: 100svh) {
