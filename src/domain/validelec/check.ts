@@ -1,5 +1,5 @@
 import type { CircuitDefinition } from '@/domain/circuit';
-import { voltageDrop } from './dimensioning';
+import { breakerUnderLoad, cableOverBreaker, minSection, voltageDrop } from './dimensioning';
 import { type Installation, validateInstallation } from './installation';
 import { STANDARDS } from './standards';
 import type { Finding, Issue, RuleSpec, StandardId, StandardProfile } from './types';
@@ -26,6 +26,9 @@ const WIRING_RULES: Readonly<Record<WiringRuleId, WiringRule>> = {
 
 /** Rules on the installation as built, with the threshold of the standard. */
 const DIMENSIONING_RULES: { readonly [K in DimensioningRuleId]: DimensioningRule<K> } = {
+  'min-section': minSection,
+  'breaker-under-load': breakerUnderLoad,
+  'cable-over-breaker': cableOverBreaker,
   'voltage-drop': voltageDrop,
 };
 

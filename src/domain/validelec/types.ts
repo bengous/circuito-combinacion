@@ -24,8 +24,22 @@ export interface StandardProfile {
   readonly rules: {
     readonly 'switch-on-neutral': RuleSpec | null;
     readonly 'live-lamp-when-off': RuleSpec | null;
+    /** `minimum`: section of each conductor, mm². */
+    readonly 'min-section': RuleSpec<{ readonly minimum: number }> | null;
+    readonly 'breaker-under-load': RuleSpec | null;
+    readonly 'cable-over-breaker': RuleSpec | null;
     /** `maximum`: drop from the main board to the lamp, as a fraction of U. */
     readonly 'voltage-drop': RuleSpec<{ readonly maximum: number }> | null;
+  };
+  /**
+   * Current-carrying capacity of PVC copper conductors in conduit (method B1, two loaded
+   * conductors): base value in A by section in mm², times a factor by ambient temperature in
+   * °C, times a factor by number of circuits in the conduit.
+   */
+  readonly ampacity: {
+    readonly base: Readonly<Record<number, number>>;
+    readonly temperature: Readonly<Record<number, number>>;
+    readonly grouping: Readonly<Record<number, number>>;
   };
   /** Conductor constants for the voltage drop, at service temperature. */
   readonly conductor: {
@@ -46,6 +60,24 @@ export type Finding =
   | { readonly rule: 'switch-on-neutral'; readonly device: string; readonly positions: Positions }
   | { readonly rule: 'live-lamp-when-off'; readonly lamp: string; readonly positions: Positions }
   | { readonly rule: 'idle-control-point'; readonly device: string; readonly positions: Positions }
+  | {
+      readonly rule: 'min-section';
+      readonly conductor: string;
+      readonly section: number;
+      readonly minimum: number;
+    }
+  | {
+      readonly rule: 'breaker-under-load';
+      readonly designCurrent: number;
+      readonly breaker: number;
+    }
+  | {
+      readonly rule: 'cable-over-breaker';
+      readonly conductor: string;
+      readonly breaker: number;
+      /** I_Z of the conductor, A. */
+      readonly ampacity: number;
+    }
   | {
       readonly rule: 'voltage-drop';
       /** Fraction of U, in the worst position where the lamp is on. */
