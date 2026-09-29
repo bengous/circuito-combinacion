@@ -26,8 +26,8 @@ Une flèche veut dire « peut importer ». Jamais dans l'autre sens.
 - **`i18n/`** : tous les textes d'interface. Aucun texte en dur dans les composants.
 - **`app/`** : l'assemblage (`App.tsx`) et le filet de sécurité (`ErrorBoundary`).
 - **`test/`** : les aides hors couches (`setup.ts`, `contrast.ts`, `themeTokens.ts`,
-  `schematicConsistency.ts`), lues par les tests unitaires et par les tests de jetons. Elles
-  ne font pas partie de la hiérarchie `app → features → domain`.
+  `schematicConsistency.ts`, `installations.ts`), lues par les tests unitaires et par les
+  tests de jetons. Elles ne font pas partie de la hiérarchie `app → features → domain`.
 
 ## Le modèle électrique
 
@@ -61,11 +61,25 @@ lampe), la première position fautive, la gravité et l'article.
 - **Règles fonctionnelles** (`short-circuit`, `idle-control-point`) : toujours `error`, sans
   article.
 - **Règles d'une norme** (`switch-on-neutral`, `live-lamp-when-off`) : le profil de la norme
-  (`standards.ts`, AEA 90364 ou IEC 60364) donne la gravité et l'article, ou `null` si la
-  norme n'a pas la règle.
+  (`aea.ts` pour l'AEA 90364, `iec.ts` pour l'IEC 60364) donne la gravité et l'article, ou
+  `null` si la norme n'a pas la règle.
+
+`checkInstallation(installation, norme)` y ajoute le dimensionnement (voir
+[ADR 0006](adr/0006-dimensionnement.md)). Une `Installation` porte le circuit, la tension,
+le disjoncteur, la section et la longueur de chaque conducteur, la charge de la lampe, la
+température ambiante, le nombre de circuits dans la gaine et le tableau d'où part le
+circuit ; elle est validée à l'entrée. Six règles lisent les seuils, les tableaux de
+courant admissible et les constantes de chute de tension du profil : section minimale,
+disjoncteur sous la charge, conducteur non protégé, plafond du disjoncteur d'éclairage,
+chute de tension, chute après un tableau secondaire. Une valeur absente d'un tableau lève
+une erreur.
+
+La norme choisie décide de la gravité. Chaque problème liste dans `elsewhere` les autres
+normes qui jugent autrement ; un constat que seule une autre norme fait arrive en `info`.
 
 Un problème ne contient aucun texte. Les règles tournent seulement dans les tests :
-`wiring.test.ts` vérifie tout le catalogue avec chaque norme.
+`wiring.test.ts` vérifie tout le catalogue avec chaque norme ; `dimensioning.test.ts` et
+`verdicts.test.ts` partent des installations de `test/installations.ts`.
 
 ## Le dessin
 
