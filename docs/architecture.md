@@ -25,9 +25,9 @@ Une flèche veut dire « peut importer ». Jamais dans l'autre sens.
   stockage local, hooks génériques.
 - **`i18n/`** : tous les textes d'interface. Aucun texte en dur dans les composants.
 - **`app/`** : l'assemblage (`App.tsx`) et le filet de sécurité (`ErrorBoundary`).
-- **`test/`** : les aides hors couches (`setup.ts`, `contrast.ts`, `themeTokens.ts`), lues
-  par les tests unitaires et par les tests de jetons. Elles ne font pas partie de la
-  hiérarchie `app → features → domain`.
+- **`test/`** : les aides hors couches (`setup.ts`, `contrast.ts`, `themeTokens.ts`,
+  `schematicConsistency.ts`), lues par les tests unitaires et par les tests de jetons. Elles
+  ne font pas partie de la hiérarchie `app → features → domain`.
 
 ## Le modèle électrique
 
@@ -59,6 +59,11 @@ dans `devices.ts` sans toucher au solveur.
    chaque boîtier et chaque texte. Aujourd'hui une seule stratégie, `chain` (verticale) ;
 2. **les composants** (`parts/`) : ils dessinent à partir de la géométrie et de l'état.
    Chaque symbole a son fichier (`CombinacionSymbol`, `CruceSymbol`, `LampSymbol`…).
+
+Le dessin est une seconde description du circuit. `layout.test.ts` vérifie qu'il dit la
+même chose que le modèle (prédicats de `test/schematicConsistency.ts`), et
+`Schematic.test.tsx` vérifie chaque fil rendu (`data-conductor`). La stratégie `chain`
+dessine une seule lampe : elle refuse un circuit qui en a plusieurs.
 
 Le style d'un fil (couleur, épaisseur, animation) est décidé dans `wireStyle.ts`, testé à
 part. L'état ne passe jamais par la couleur seule : épaisseur et mouvement pour le courant,
