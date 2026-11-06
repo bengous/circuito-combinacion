@@ -8,4 +8,4 @@
 - [ ] `npm run test:e2e` passe, ou la CI `e2e` est verte
 - [ ] Vérifié sur téléphone (360×740 et 844×390 au minimum, texte « Muy grande », deux thèmes) si l'interface change
 - [ ] Textes dans `src/i18n/es.ts` (espagnol d'Argentine), couleurs dans `styles/tokens.css`
-- [ ] Docs à jour si une règle ou un comportement change (`CLAUDE.md`, `docs/`, ADR)
+- [ ] Docs à jour si une règle ou un comportement change (`AGENTS.md`, `docs/`, ADR)
