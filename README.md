@@ -64,7 +64,7 @@ docs/adr/           Décisions d'architecture
 
 Détails et règles : [docs/architecture.md](docs/architecture.md).
 Ajouter un schéma : [docs/ajouter-un-schema.md](docs/ajouter-un-schema.md).
-Décisions : [docs/adr/](docs/adr/README.md). Pour les agents : [CLAUDE.md](CLAUDE.md).
+Décisions : [docs/adr/](docs/adr/README.md). Pour les agents : [AGENTS.md](AGENTS.md).
 
 ## Déploiement
 
