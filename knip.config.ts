@@ -9,6 +9,8 @@ const config: KnipConfig = {
   // Types that name part of a module's vocabulary (e.g. `Lamp` in domain/circuit/types.ts)
   // may stay exported when the same file uses them. Values may not.
   ignoreExportsUsedInFile: { interface: true, type: true },
+  // mise installs lefthook, so no lefthook dependency enables the plugin that reads lefthook.yml.
+  lefthook: true,
 };
 
 export default config;
