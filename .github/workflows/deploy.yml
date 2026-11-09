@@ -14,18 +14,20 @@ concurrency:
 
 jobs:
   build:
+    name: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: read
+      pages: read # configure-pages reads the site's Pages settings
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      # The $/ form zizmor asks for fails actionlint 1.7.12; this step runs right after the checkout.
+      - uses: ./.github/actions/mise # zizmor: ignore[self-repository]
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          tools: node
+          github-token: ${{ secrets.MISE_GITHUB_TOKEN }}
       - run: npm ci
       - run: npm run check
       - run: npm run build
@@ -35,11 +37,12 @@ jobs:
           path: dist
 
   deploy:
+    name: deploy
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      pages: write
-      id-token: write
+      pages: write # deploy-pages publishes the uploaded artifact
+      id-token: write # deploy-pages proves the run's identity to Pages with an OIDC token
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

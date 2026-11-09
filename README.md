@@ -12,10 +12,11 @@ L'ancienne version reste accessible dans `public/legacy/combinacion-v1.html`.
 
 ## Démarrer
 
-Node 24 ou plus (voir `.nvmrc`).
+Node 24 ou plus. [mise](https://mise.jdx.dev) installe celui de `mise.toml`, et lefthook.
 
 ```sh
-npm install      # installe aussi les hooks git (lefthook)
+mise install     # installe aussi les hooks git (lefthook)
+npm install
 npm run dev      # http://localhost:5173
 ```
 
